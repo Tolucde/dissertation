@@ -1,0 +1,630 @@
+[{
+        "Topic": "Algebra",
+        "Lessons": [{
+                "Level": "Beginner",
+                "ContentID": "ALG101",
+                "Title": "Introduction to Variables",
+                "Description": "Learn the basics of variables and how to represent unknowns.",
+                "LearningOutcome": "Understand the concept of variables in algebra.",
+                "Prerequisites": "Basic arithmetic",
+                "ResourceURL": "https://example.com/math/algebra/beginner"
+            },
+            {
+                "Level": "Intermediate",
+                "ContentID": "ALG201",
+                "Title": "Solving Linear Equations",
+                "Description": "Learn to solve single-variable linear equations.",
+                "LearningOutcome": "Solve linear equations with real numbers.",
+                "Prerequisites": "Introduction to Variables",
+                "ResourceURL": "https://example.com/math/algebra/intermediate"
+            },
+            {
+                "Level": "Advanced",
+                "ContentID": "ALG301",
+                "Title": "Quadratic Equations",
+                "Description": "Explore methods to solve quadratic equations, including factoring and the quadratic formula.",
+                "LearningOutcome": "Solve quadratic equations using multiple methods.",
+                "Prerequisites": "Solving Linear Equations",
+                "ResourceURL": "https://example.com/math/algebra/advanced"
+            }
+        ]
+    },
+    {
+        "Topic": "Geometry",
+        "Lessons": [{
+                "Level": "Beginner",
+                "ContentID": "GEO101",
+                "Title": "Understanding Shapes",
+                "Description": "Introduction to basic shapes and their properties.",
+                "LearningOutcome": "Identify and classify common shapes.",
+                "Prerequisites": "None",
+                "ResourceURL": "https://example.com/math/geometry/beginner"
+            },
+            {
+                "Level": "Intermediate",
+                "ContentID": "GEO201",
+                "Title": "Angles and Triangles",
+                "Description": "Learn about angles and properties of triangles.",
+                "LearningOutcome": "Calculate angles in triangles.",
+                "Prerequisites": "Understanding Shapes",
+                "ResourceURL": "https://example.com/math/geometry/intermediate"
+            },
+            {
+                "Level": "Advanced",
+                "ContentID": "GEO301",
+                "Title": "Circle Theorems",
+                "Description": "Explore theorems related to circles and tangents.",
+                "LearningOutcome": "Apply circle theorems to solve geometric problems.",
+                "Prerequisites": "Angles and Triangles",
+                "ResourceURL": "https://example.com/math/geometry/advanced"
+            }
+        ]
+    },
+    {
+        "Topic": "Statistics",
+        "Lessons": [{
+                "Level": "Beginner",
+                "ContentID": "STAT101",
+                "Title": "Introduction to Data",
+                "Description": "Learn about data types and basic representation.",
+                "LearningOutcome": "Classify and organize data effectively.",
+                "Prerequisites": "None",
+                "ResourceURL": "https://example.com/math/statistics/beginner"
+            },
+            {
+                "Level": "Intermediate",
+                "ContentID": "STAT201",
+                "Title": "Measures of Central Tendency",
+                "Description": "Learn about mean, median, and mode.",
+                "LearningOutcome": "Calculate measures of central tendency for datasets.",
+                "Prerequisites": "Introduction to Data",
+                "ResourceURL": "https://example.com/math/statistics/intermediate"
+            },
+            {
+                "Level": "Advanced",
+                "ContentID": "STAT301",
+                "Title": "Probability Distributions",
+                "Description": "Explore probability distributions and their applications.",
+                "LearningOutcome": "Analyze and interpret probability distributions.",
+                "Prerequisites": "Measures of Central Tendency",
+                "ResourceURL": "https://example.com/math/statistics/advanced"
+            }
+        ]
+    },
+    {
+        "Topic": "Calculus",
+        "Lessons": [{
+                "Level": "Beginner",
+                "ContentID": "CAL101",
+                "Title": "Introduction to Limits",
+                "Description": "Learn the concept of limits in calculus.",
+                "LearningOutcome": "Understand and calculate basic limits.",
+                "Prerequisites": "Basic algebra",
+                "ResourceURL": "https://example.com/math/calculus/beginner"
+            },
+            {
+                "Level": "Intermediate",
+                "ContentID": "CAL201",
+                "Title": "Differentiation Basics",
+                "Description": "Learn the rules of differentiation and basic applications.",
+                "LearningOutcome": "Differentiate simple functions.",
+                "Prerequisites": "Introduction to Limits",
+                "ResourceURL": "https://example.com/math/calculus/intermediate"
+            },
+            {
+                "Level": "Advanced",
+                "ContentID": "CAL301",
+                "Title": "Integration Techniques",
+                "Description": "Explore integration methods like substitution and parts.",
+                "LearningOutcome": "Solve complex integrals using advanced techniques.",
+                "Prerequisites": "Differentiation Basics",
+                "ResourceURL": "https://example.com/math/calculus/advanced"
+            }
+        ]
+    },
+    {
+        "Topic": "Trigonometry",
+        "Lessons": [{
+                "Level": "Beginner",
+                "ContentID": "TRIG101",
+                "Title": "Introduction to Trigonometric Ratios",
+                "Description": "Learn about sine, cosine, and tangent.",
+                "LearningOutcome": "Understand and use basic trigonometric ratios.",
+                "Prerequisites": "Basic geometry",
+                "ResourceURL": "https://example.com/math/trigonometry/beginner"
+            },
+            {
+                "Level": "Intermediate",
+                "ContentID": "TRIG201",
+                "Title": "Trigonometric Identities",
+                "Description": "Explore fundamental identities like Pythagorean identities.",
+                "LearningOutcome": "Apply trigonometric identities in solving equations.",
+                "Prerequisites": "Introduction to Trigonometric Ratios",
+                "ResourceURL": "https://example.com/math/trigonometry/intermediate"
+            },
+            {
+                "Level": "Advanced",
+                "ContentID": "TRIG301",
+                "Title": "Trigonometric Equations",
+                "Description": "Solve complex trigonometric equations and applications.",
+                "LearningOutcome": "Analyze and solve advanced trigonometric problems.",
+                "Prerequisites": "Trigonometric Identities",
+                "ResourceURL": "https://example.com/math/trigonometry/advanced"
+            }
+        ]
+    }
+]
+
+
+
+[{
+        "Topic": "Supply and Demand",
+        "Lessons": [{
+                "Level": "Beginner",
+                "ContentID": "ECON101",
+                "Title": "Introduction to Supply and Demand",
+                "Description": "Learn the basic concepts of supply and demand in a market.",
+                "LearningOutcome": "Understand how supply and demand affect prices.",
+                "Prerequisites": "None",
+                "ResourceURL": "https://example.com/economics/supply-demand/beginner"
+            },
+            {
+                "Level": "Intermediate",
+                "ContentID": "ECON201",
+                "Title": "Market Equilibrium",
+                "Description": "Explore how supply and demand interact to create equilibrium.",
+                "LearningOutcome": "Analyze shifts in equilibrium caused by changes in supply or demand.",
+                "Prerequisites": "Introduction to Supply and Demand",
+                "ResourceURL": "https://example.com/economics/supply-demand/intermediate"
+            },
+            {
+                "Level": "Advanced",
+                "ContentID": "ECON301",
+                "Title": "Elasticity of Supply and Demand",
+                "Description": "Examine how elasticity impacts consumer and producer behavior.",
+                "LearningOutcome": "Calculate and interpret price elasticity of supply and demand.",
+                "Prerequisites": "Market Equilibrium",
+                "ResourceURL": "https://example.com/economics/supply-demand/advanced"
+            }
+        ]
+    },
+    {
+        "Topic": "Macroeconomic Indicators",
+        "Lessons": [{
+                "Level": "Beginner",
+                "ContentID": "ECON102",
+                "Title": "Introduction to GDP",
+                "Description": "Understand what GDP measures and why it matters.",
+                "LearningOutcome": "Explain the basic concept of GDP.",
+                "Prerequisites": "None",
+                "ResourceURL": "https://example.com/economics/gdp/beginner"
+            },
+            {
+                "Level": "Intermediate",
+                "ContentID": "ECON202",
+                "Title": "Unemployment and Inflation",
+                "Description": "Learn how unemployment and inflation are measured and their significance.",
+                "LearningOutcome": "Analyze the relationship between unemployment and inflation.",
+                "Prerequisites": "Introduction to GDP",
+                "ResourceURL": "https://example.com/economics/gdp/intermediate"
+            },
+            {
+                "Level": "Advanced",
+                "ContentID": "ECON302",
+                "Title": "Monetary and Fiscal Policy",
+                "Description": "Explore the tools governments use to manage economies.",
+                "LearningOutcome": "Evaluate the effectiveness of different economic policies.",
+                "Prerequisites": "Unemployment and Inflation",
+                "ResourceURL": "https://example.com/economics/gdp/advanced"
+            }
+        ]
+    },
+    {
+        "Topic": "Microeconomics",
+        "Lessons": [{
+                "Level": "Beginner",
+                "ContentID": "ECON103",
+                "Title": "Introduction to Opportunity Cost",
+                "Description": "Learn the concept of opportunity cost and how it affects decisions.",
+                "LearningOutcome": "Identify opportunity costs in various scenarios.",
+                "Prerequisites": "None",
+                "ResourceURL": "https://example.com/economics/microeconomics/beginner"
+            },
+            {
+                "Level": "Intermediate",
+                "ContentID": "ECON203",
+                "Title": "Production Possibility Frontier",
+                "Description": "Explore the PPF model to understand trade-offs and efficiency.",
+                "LearningOutcome": "Analyze trade-offs and opportunity costs using the PPF.",
+                "Prerequisites": "Introduction to Opportunity Cost",
+                "ResourceURL": "https://example.com/economics/microeconomics/intermediate"
+            },
+            {
+                "Level": "Advanced",
+                "ContentID": "ECON303",
+                "Title": "Market Structures",
+                "Description": "Study different market structures like monopoly, oligopoly, and perfect competition.",
+                "LearningOutcome": "Compare and contrast market structures and their outcomes.",
+                "Prerequisites": "Production Possibility Frontier",
+                "ResourceURL": "https://example.com/economics/microeconomics/advanced"
+            }
+        ]
+    },
+    {
+        "Topic": "Trade and Globalization",
+        "Lessons": [{
+                "Level": "Beginner",
+                "ContentID": "ECON104",
+                "Title": "Basics of International Trade",
+                "Description": "Learn why countries trade and the benefits of trade.",
+                "LearningOutcome": "Explain the concept of comparative advantage.",
+                "Prerequisites": "None",
+                "ResourceURL": "https://example.com/economics/trade/beginner"
+            },
+            {
+                "Level": "Intermediate",
+                "ContentID": "ECON204",
+                "Title": "Tariffs and Trade Barriers",
+                "Description": "Explore how tariffs and trade restrictions impact economies.",
+                "LearningOutcome": "Analyze the effects of trade barriers on global markets.",
+                "Prerequisites": "Basics of International Trade",
+                "ResourceURL": "https://example.com/economics/trade/intermediate"
+            },
+            {
+                "Level": "Advanced",
+                "ContentID": "ECON304",
+                "Title": "Trade Agreements and Globalization",
+                "Description": "Examine the role of trade agreements in shaping global economies.",
+                "LearningOutcome": "Evaluate the impact of globalization and trade agreements.",
+                "Prerequisites": "Tariffs and Trade Barriers",
+                "ResourceURL": "https://example.com/economics/trade/advanced"
+            }
+        ]
+    },
+    {
+        "Topic": "Behavioral Economics",
+        "Lessons": [{
+                "Level": "Beginner",
+                "ContentID": "ECON105",
+                "Title": "Introduction to Behavioral Economics",
+                "Description": "Learn how psychology influences economic decisions.",
+                "LearningOutcome": "Understand basic principles of behavioral economics.",
+                "Prerequisites": "None",
+                "ResourceURL": "https://example.com/economics/behavioral/beginner"
+            },
+            {
+                "Level": "Intermediate",
+                "ContentID": "ECON205",
+                "Title": "Heuristics and Biases",
+                "Description": "Explore common heuristics and cognitive biases in decision-making.",
+                "LearningOutcome": "Identify biases that affect economic behavior.",
+                "Prerequisites": "Introduction to Behavioral Economics",
+                "ResourceURL": "https://example.com/economics/behavioral/intermediate"
+            },
+            {
+                "Level": "Advanced",
+                "ContentID": "ECON305",
+                "Title": "Nudging and Choice Architecture",
+                "Description": "Learn how nudges influence decision-making and policy design.",
+                "LearningOutcome": "Design nudges to improve decision-making outcomes.",
+                "Prerequisites": "Heuristics and Biases",
+                "ResourceURL": "https://example.com/economics/behavioral/advanced"
+            }
+        ]
+    }
+]
+
+[{
+        "Topic": "Physics",
+        "Lessons": [{
+                "Level": "Beginner",
+                "ContentID": "PHY101",
+                "Title": "Introduction to Forces",
+                "Description": "Learn about the basics of forces and their effects on motion.",
+                "LearningOutcome": "Understand how forces affect objects.",
+                "Prerequisites": "None",
+                "ResourceURL": "https://example.com/science/physics/beginner"
+            },
+            {
+                "Level": "Intermediate",
+                "ContentID": "PHY201",
+                "Title": "Newton's Laws of Motion",
+                "Description": "Explore Newton's three laws of motion with examples.",
+                "LearningOutcome": "Apply Newton's laws to solve motion problems.",
+                "Prerequisites": "Introduction to Forces",
+                "ResourceURL": "https://example.com/science/physics/intermediate"
+            },
+            {
+                "Level": "Advanced",
+                "ContentID": "PHY301",
+                "Title": "Work, Energy, and Power",
+                "Description": "Learn the concepts of work, energy, and power in physics.",
+                "LearningOutcome": "Solve complex problems involving energy transformations.",
+                "Prerequisites": "Newton's Laws of Motion",
+                "ResourceURL": "https://example.com/science/physics/advanced"
+            }
+        ]
+    },
+    {
+        "Topic": "Chemistry",
+        "Lessons": [{
+                "Level": "Beginner",
+                "ContentID": "CHEM101",
+                "Title": "Introduction to the Periodic Table",
+                "Description": "Learn about the organization and purpose of the periodic table.",
+                "LearningOutcome": "Identify elements and their properties on the periodic table.",
+                "Prerequisites": "None",
+                "ResourceURL": "https://example.com/science/chemistry/beginner"
+            },
+            {
+                "Level": "Intermediate",
+                "ContentID": "CHEM201",
+                "Title": "Chemical Bonding",
+                "Description": "Explore ionic, covalent, and metallic bonds.",
+                "LearningOutcome": "Explain the formation of different types of chemical bonds.",
+                "Prerequisites": "Introduction to the Periodic Table",
+                "ResourceURL": "https://example.com/science/chemistry/intermediate"
+            },
+            {
+                "Level": "Advanced",
+                "ContentID": "CHEM301",
+                "Title": "Chemical Reactions and Stoichiometry",
+                "Description": "Understand reaction types and balance chemical equations.",
+                "LearningOutcome": "Solve complex stoichiometric calculations.",
+                "Prerequisites": "Chemical Bonding",
+                "ResourceURL": "https://example.com/science/chemistry/advanced"
+            }
+        ]
+    },
+    {
+        "Topic": "Biology",
+        "Lessons": [{
+                "Level": "Beginner",
+                "ContentID": "BIO101",
+                "Title": "Cell Structure and Function",
+                "Description": "Learn the basics of cell components and their roles.",
+                "LearningOutcome": "Identify cell organelles and their functions.",
+                "Prerequisites": "None",
+                "ResourceURL": "https://example.com/science/biology/beginner"
+            },
+            {
+                "Level": "Intermediate",
+                "ContentID": "BIO201",
+                "Title": "DNA and Genetics",
+                "Description": "Explore the structure of DNA and basic genetics principles.",
+                "LearningOutcome": "Understand genetic inheritance and DNA replication.",
+                "Prerequisites": "Cell Structure and Function",
+                "ResourceURL": "https://example.com/science/biology/intermediate"
+            },
+            {
+                "Level": "Advanced",
+                "ContentID": "BIO301",
+                "Title": "Evolution and Natural Selection",
+                "Description": "Understand the principles of evolution and survival mechanisms.",
+                "LearningOutcome": "Analyze evolutionary adaptations and their impacts.",
+                "Prerequisites": "DNA and Genetics",
+                "ResourceURL": "https://example.com/science/biology/advanced"
+            }
+        ]
+    },
+    {
+        "Topic": "Earth Science",
+        "Lessons": [{
+                "Level": "Beginner",
+                "ContentID": "ES101",
+                "Title": "Introduction to Earth's Layers",
+                "Description": "Learn about the Earth's crust, mantle, and core.",
+                "LearningOutcome": "Describe the composition and structure of Earth's layers.",
+                "Prerequisites": "None",
+                "ResourceURL": "https://example.com/science/earth-science/beginner"
+            },
+            {
+                "Level": "Intermediate",
+                "ContentID": "ES201",
+                "Title": "Plate Tectonics",
+                "Description": "Explore the theory of plate tectonics and its evidence.",
+                "LearningOutcome": "Explain how plate movements shape Earth's surface.",
+                "Prerequisites": "Introduction to Earth's Layers",
+                "ResourceURL": "https://example.com/science/earth-science/intermediate"
+            },
+            {
+                "Level": "Advanced",
+                "ContentID": "ES301",
+                "Title": "Earthquakes and Volcanism",
+                "Description": "Understand the causes and effects of earthquakes and volcanoes.",
+                "LearningOutcome": "Analyze seismic and volcanic activity patterns.",
+                "Prerequisites": "Plate Tectonics",
+                "ResourceURL": "https://example.com/science/earth-science/advanced"
+            }
+        ]
+    },
+    {
+        "Topic": "Astronomy",
+        "Lessons": [{
+                "Level": "Beginner",
+                "ContentID": "AST101",
+                "Title": "Introduction to the Solar System",
+                "Description": "Learn the basic components of our solar system.",
+                "LearningOutcome": "Identify planets and their characteristics.",
+                "Prerequisites": "None",
+                "ResourceURL": "https://example.com/science/astronomy/beginner"
+            },
+            {
+                "Level": "Intermediate",
+                "ContentID": "AST201",
+                "Title": "Stars and Galaxies",
+                "Description": "Explore the life cycle of stars and types of galaxies.",
+                "LearningOutcome": "Understand stellar evolution and galaxy formation.",
+                "Prerequisites": "Introduction to the Solar System",
+                "ResourceURL": "https://example.com/science/astronomy/intermediate"
+            },
+            {
+                "Level": "Advanced",
+                "ContentID": "AST301",
+                "Title": "Cosmology and the Universe",
+                "Description": "Learn about the Big Bang theory and the expansion of the universe.",
+                "LearningOutcome": "Analyze evidence supporting cosmological theories.",
+                "Prerequisites": "Stars and Galaxies",
+                "ResourceURL": "https://example.com/science/astronomy/advanced"
+            }
+        ]
+    }
+]
+
+
+[{
+        "Topic": "Programming Basics",
+        "Lessons": [{
+                "Level": "Beginner",
+                "ContentID": "CS101",
+                "Title": "Introduction to Programming",
+                "Description": "Learn the fundamentals of programming and writing simple code.",
+                "LearningOutcome": "Understand variables, data types, and basic syntax.",
+                "Prerequisites": "None",
+                "ResourceURL": "https://example.com/computer-science/programming/beginner"
+            },
+            {
+                "Level": "Intermediate",
+                "ContentID": "CS201",
+                "Title": "Control Structures",
+                "Description": "Explore loops, conditionals, and functions in programming.",
+                "LearningOutcome": "Write programs with control flow and modular code.",
+                "Prerequisites": "Introduction to Programming",
+                "ResourceURL": "https://example.com/computer-science/programming/intermediate"
+            },
+            {
+                "Level": "Advanced",
+                "ContentID": "CS301",
+                "Title": "Object-Oriented Programming",
+                "Description": "Learn the principles of OOP, including classes and inheritance.",
+                "LearningOutcome": "Build scalable and reusable code using OOP principles.",
+                "Prerequisites": "Control Structures",
+                "ResourceURL": "https://example.com/computer-science/programming/advanced"
+            }
+        ]
+    },
+    {
+        "Topic": "Data Structures",
+        "Lessons": [{
+                "Level": "Beginner",
+                "ContentID": "CS102",
+                "Title": "Introduction to Data Structures",
+                "Description": "Understand the purpose and basic types of data structures.",
+                "LearningOutcome": "Identify and use arrays, lists, and stacks.",
+                "Prerequisites": "Basic Programming Knowledge",
+                "ResourceURL": "https://example.com/computer-science/data-structures/beginner"
+            },
+            {
+                "Level": "Intermediate",
+                "ContentID": "CS202",
+                "Title": "Trees and Graphs",
+                "Description": "Explore hierarchical and networked data structures.",
+                "LearningOutcome": "Implement and traverse trees and graphs.",
+                "Prerequisites": "Introduction to Data Structures",
+                "ResourceURL": "https://example.com/computer-science/data-structures/intermediate"
+            },
+            {
+                "Level": "Advanced",
+                "ContentID": "CS302",
+                "Title": "Advanced Algorithms in Data Structures",
+                "Description": "Learn complex algorithms for efficient data manipulation.",
+                "LearningOutcome": "Optimize solutions using advanced data structures.",
+                "Prerequisites": "Trees and Graphs",
+                "ResourceURL": "https://example.com/computer-science/data-structures/advanced"
+            }
+        ]
+    },
+    {
+        "Topic": "Algorithms",
+        "Lessons": [{
+                "Level": "Beginner",
+                "ContentID": "CS103",
+                "Title": "Introduction to Algorithms",
+                "Description": "Learn the basics of algorithms and problem-solving techniques.",
+                "LearningOutcome": "Write simple algorithms for basic tasks.",
+                "Prerequisites": "None",
+                "ResourceURL": "https://example.com/computer-science/algorithms/beginner"
+            },
+            {
+                "Level": "Intermediate",
+                "ContentID": "CS203",
+                "Title": "Sorting and Searching Algorithms",
+                "Description": "Explore common sorting and searching techniques.",
+                "LearningOutcome": "Implement efficient sorting and searching algorithms.",
+                "Prerequisites": "Introduction to Algorithms",
+                "ResourceURL": "https://example.com/computer-science/algorithms/intermediate"
+            },
+            {
+                "Level": "Advanced",
+                "ContentID": "CS303",
+                "Title": "Dynamic Programming and Greedy Algorithms",
+                "Description": "Learn advanced algorithmic strategies for optimization.",
+                "LearningOutcome": "Solve complex problems using dynamic programming.",
+                "Prerequisites": "Sorting and Searching Algorithms",
+                "ResourceURL": "https://example.com/computer-science/algorithms/advanced"
+            }
+        ]
+    },
+    {
+        "Topic": "Databases",
+        "Lessons": [{
+                "Level": "Beginner",
+                "ContentID": "CS104",
+                "Title": "Introduction to Databases",
+                "Description": "Understand basic database concepts and terminology.",
+                "LearningOutcome": "Create and query a simple relational database.",
+                "Prerequisites": "None",
+                "ResourceURL": "https://example.com/computer-science/databases/beginner"
+            },
+            {
+                "Level": "Intermediate",
+                "ContentID": "CS204",
+                "Title": "SQL and Data Manipulation",
+                "Description": "Learn SQL queries to manage and retrieve data.",
+                "LearningOutcome": "Perform CRUD operations and join tables.",
+                "Prerequisites": "Introduction to Databases",
+                "ResourceURL": "https://example.com/computer-science/databases/intermediate"
+            },
+            {
+                "Level": "Advanced",
+                "ContentID": "CS304",
+                "Title": "Database Design and Optimization",
+                "Description": "Explore normalization, indexing, and query optimization.",
+                "LearningOutcome": "Design efficient databases and optimize queries.",
+                "Prerequisites": "SQL and Data Manipulation",
+                "ResourceURL": "https://example.com/computer-science/databases/advanced"
+            }
+        ]
+    },
+    {
+        "Topic": "Artificial Intelligence",
+        "Lessons": [{
+                "Level": "Beginner",
+                "ContentID": "CS105",
+                "Title": "Introduction to AI",
+                "Description": "Learn the basics of AI and its real-world applications.",
+                "LearningOutcome": "Understand AI concepts like machine learning and neural networks.",
+                "Prerequisites": "Basic Programming Knowledge",
+                "ResourceURL": "https://example.com/computer-science/ai/beginner"
+            },
+            {
+                "Level": "Intermediate",
+                "ContentID": "CS205",
+                "Title": "Supervised and Unsupervised Learning",
+                "Description": "Explore types of machine learning and their use cases.",
+                "LearningOutcome": "Implement basic supervised and unsupervised algorithms.",
+                "Prerequisites": "Introduction to AI",
+                "ResourceURL": "https://example.com/computer-science/ai/intermediate"
+            },
+            {
+                "Level": "Advanced",
+                "ContentID": "CS305",
+                "Title": "Deep Learning and Neural Networks",
+                "Description": "Learn advanced techniques in deep learning and model training.",
+                "LearningOutcome": "Build and optimize neural networks for complex problems.",
+                "Prerequisites": "Supervised and Unsupervised Learning",
+                "ResourceURL": "https://example.com/computer-science/ai/advanced"
+            }
+        ]
+    }
+]
