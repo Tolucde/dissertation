@@ -9,10 +9,15 @@ import {
   ToggleText,
   ToggleButton,
 } from './styles'
+import { Navigate, useNavigate } from 'react-router-dom';
 
 export const Login = () => {
+  const navigate = useNavigate()
+  const API_URL = import.meta.env.VITE_API_URL;
+
   const [isLogin, setIsLogin] = useState(true)
   const [formData, setFormData] = useState({
+    name: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -56,11 +61,12 @@ export const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    console.log(formData)
 
     try {
       if (isLogin) {
         // Login logic
-        const response = await fetch('/api/login', {
+        const response = await fetch(`${API_URL}/users/login`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -76,10 +82,10 @@ export const Login = () => {
         }
 
         const data = await response.json()
-        // Store token in localStorage or handle successful login
+        // Store token in localStorage 
         localStorage.setItem('token', data.token)
-        // Redirect to dashboard or home page
-        // navigate('/dashboard')  // Uncomment if using react-router
+        // Redirect to dashboard 
+        navigate('/dashboard')  
       } else {
         // Sign up logic
         if (formData.password !== formData.confirmPassword) {
@@ -87,12 +93,13 @@ export const Login = () => {
           return
         }
 
-        const response = await fetch('/api/signup', {
+        const response = await fetch(`${API_URL}/users/register`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
+            name: formData.name,
             email: formData.email,
             password: formData.password,
           }),
@@ -103,10 +110,10 @@ export const Login = () => {
         }
 
         const data = await response.json()
-        // Store token in localStorage or handle successful signup
+        // Store token in localStorage 
         localStorage.setItem('token', data.token)
-        // Redirect to dashboard or home page
-        // navigate('/dashboard')  // Uncomment if using react-router
+        // Redirect to dashboard 
+        navigate('/dashboard')  
       }
     } catch (error) {
       console.error('Authentication error:', error)
@@ -119,6 +126,16 @@ export const Login = () => {
       <FormWrapper>
         <Title>{isLogin ? 'Login' : 'Sign Up'}</Title>
         <Form onSubmit={handleSubmit}>
+        {!isLogin && (
+            <Input
+              type='text'
+              name='name'
+              placeholder='Name'
+              value={formData.name}
+              onChange={handleChange}
+              required
+            />
+          )}
           <Input
             type='email'
             name='email'

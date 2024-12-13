@@ -6,6 +6,7 @@ import LessonPage from './pages/LessonPage/LessonPage'
 import QuizPage from './pages/QuizPage/QuizPage'
 import Analytics from './pages/Analytics/Analytics'
 import HomePage from './pages/HomePage/HomePage'
+import OnboardingPage from './pages/OnboardingPage/OnboardingPage'
 
 function App() {
   return (
@@ -17,7 +18,7 @@ function App() {
         <Route path='/quizpage' element={<QuizPage/>}/>
         <Route path='/analytics' element={<Analytics />}/>
         <Route path='/' element={<HomePage />}/>
-
+        <Route path='/onboarding' element={<OnboardingPage />}/>
       </Routes>
     </Router>
   )
