@@ -7,9 +7,11 @@ import QuizPage from './pages/QuizPage/QuizPage'
 import Analytics from './pages/Analytics/Analytics'
 import HomePage from './pages/HomePage/HomePage'
 import OnboardingPage from './pages/OnboardingPage/OnboardingPage'
+import { AppProvider } from './AppContext';
 
 function App() {
   return (
+    <AppProvider>
     <Router>
       <Routes>
         <Route path='/login' element={<Login />} />
@@ -21,6 +23,7 @@ function App() {
         <Route path='/onboarding' element={<OnboardingPage />}/>
       </Routes>
     </Router>
+    </AppProvider>
   )
 }
 

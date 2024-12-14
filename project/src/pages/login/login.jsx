@@ -1,4 +1,6 @@
 import { useState } from 'react'
+
+import { useAppContext } from '../../AppContext';
 import {
   Container,
   FormWrapper,
@@ -9,9 +11,11 @@ import {
   ToggleText,
   ToggleButton,
 } from './styles'
-import { Navigate, useNavigate } from 'react-router-dom';
+import {  useNavigate } from 'react-router-dom';
 
 export const Login = () => {
+  const { user, setUser } = useAppContext();
+
   const navigate = useNavigate()
   const API_URL = import.meta.env.VITE_API_URL;
 
@@ -82,8 +86,14 @@ export const Login = () => {
         }
 
         const data = await response.json()
+        console.log(data)
         // Store token in localStorage 
         localStorage.setItem('token', data.token)
+
+        
+        localStorage.setItem('user', JSON.stringify(data.user))
+        // Update app context with user data
+
         // Redirect to dashboard 
         navigate('/dashboard')  
       } else {
@@ -110,8 +120,11 @@ export const Login = () => {
         }
 
         const data = await response.json()
+        console.log(data)
         // Store token in localStorage 
         localStorage.setItem('token', data.token)
+        
+
         // Redirect to dashboard 
         navigate('/dashboard')  
       }

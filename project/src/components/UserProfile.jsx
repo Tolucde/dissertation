@@ -16,14 +16,19 @@ const Avatar = styled.div`
 `
 
 const UserInfo = styled.div`
+text-transform: capitalize;
   h2 {
     font-size: 1.25rem;
     font-weight: bold;
     color: #1e293b;
+
+    
   }
 
   p {
     color: #64748b;
+text-transform: capitalize;
+
   }
 `
 
@@ -37,6 +42,7 @@ const StatBox = styled.div`
   background: #f8fafc;
   padding: 0.75rem;
   border-radius: 8px;
+  text-transform: capitalize;
 
   h3 {
     font-size: 0.875rem;
@@ -86,13 +92,8 @@ const LogoutButton = styled.button`
   }
 `
 const UserProfile = () => {
-  const user = {
-    name: 'John Doe',
-    email: 'john@example.com',
-    level: 'Intermediate',
-    coursesEnrolled: 5,
-    interests: ['Finance', 'Data Analysis', 'UI Design'],
-  }
+const user = JSON.parse(localStorage.getItem('user'))
+  
   const handleLogout = () => {
     // Add logout logic here
     console.log('Logging out...')
@@ -103,24 +104,25 @@ const UserProfile = () => {
       <ProfileHeader>
         <Avatar />
         <UserInfo>
-          <h2>{user.name}</h2>
-          <p>{user.email}</p>
+          <h2>{user?.name}</h2>
+          <p>{user?.email}</p>
+          
         </UserInfo>
       </ProfileHeader>
 
       <StatsGrid>
         <StatBox>
           <h3>Level</h3>
-          <p>{user.level}</p>
+          <p>{user?.difficulty}</p>
         </StatBox>
         <StatBox>
           <h3>Courses</h3>
-          <p>{user.coursesEnrolled}</p>
+          {/* <p>{user.coursesEnrolled}</p> */}
         </StatBox>
       </StatsGrid>
       <InterestsList>
         <h3>Interests</h3>
-        {user.interests.map((interest, index) => (
+        {user?.interests?.length > 0 && user?.interests?.map((interest, index) => (
           <InterestTag key={index}>{interest}</InterestTag>
         ))}
       </InterestsList>

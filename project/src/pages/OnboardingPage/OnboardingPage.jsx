@@ -18,7 +18,9 @@ import {
     AddInterestButton    
   } from './style';
 
+  import { useAppContext } from '../../AppContext';
 const OnboardingPage = () => {
+const user = JSON.parse(localStorage.getItem('user'))
   const API_URL = import.meta.env.VITE_API_URL;
 
   const navigate = useNavigate();
@@ -98,8 +100,8 @@ const OnboardingPage = () => {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-  
-      await response.json(); 
+      const data = await response.json()  
+      localStorage.setItem('user', JSON.stringify(data.user))
       navigate('/dashboard');
     } catch (error) {
       console.error('Error saving preferences:', error);

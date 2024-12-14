@@ -4,6 +4,8 @@ import ProgressOverview from '../../components/ProgressOverview'
 import Recommendations from '../../components/Recommendations'
 import NavigationButtons from '../../components/NavigationButtons'
 import UserProfile from '../../components/UserProfile'
+import { useAppContext } from '../../AppContext'
+
 
 const DashboardContainer = styled.div`
   padding: 1.5rem;
@@ -26,6 +28,8 @@ const DashboardGrid = styled.div`
 
 const FullWidthSection = styled.div`
   grid-column: 1 / -1;
+  height: fit-content;
+
 `
 
 const WideSection = styled.div`
@@ -35,6 +39,8 @@ const WideSection = styled.div`
 `
 
 const Dashboard = () => {
+  const user = JSON.parse(localStorage.getItem('user'))
+
   return (
     <DashboardContainer>
       <DashboardGrid>
@@ -43,13 +49,13 @@ const Dashboard = () => {
         </FullWidthSection>
 
         <WideSection>
-          <ProgressOverview />
+          <ProgressOverview user={user} />
         </WideSection>
 
-        <UserProfile />
+        <UserProfile user={user} />
 
         <WideSection>
-          <Recommendations />
+          <Recommendations user={user} />
         </WideSection>
 
         <NavigationButtons />

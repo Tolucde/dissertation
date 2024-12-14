@@ -8,7 +8,7 @@ const StatsGrid = styled.div`
 `
 
 const StatCard = styled.div`
-  background: ${(props) => props.bgColor || '#f8fafc'};
+  background: ${(props) => props.bgcolor || '#f8fafc'};
   padding: 1rem;
   border-radius: 8px;
 `
@@ -25,7 +25,7 @@ const StatValue = styled.p`
   color: #1e293b;
 `
 
-const ProgressOverview = () => {
+const ProgressOverview = ({ user }) => {
   const progressData = {
     quizScore: 85,
     lessonsCompleted: 12,
@@ -38,21 +38,21 @@ const ProgressOverview = () => {
     <Card>
       <Title>Your Progress</Title>
       <StatsGrid>
-        <StatCard bgColor='#eff6ff'>
+        <StatCard bgcolor='#eff6ff'>
           <StatLabel>Quiz Average</StatLabel>
           <StatValue>{progressData.quizScore}%</StatValue>
         </StatCard>
-        <StatCard bgColor='#f0fdf4'>
+        <StatCard bgcolor='#f0fdf4'>
           <StatLabel>Lessons Completed</StatLabel>
           <StatValue>
-            {progressData.lessonsCompleted}/{progressData.totalLessons}
+            {user?.progress?.lessonsCompleted}
           </StatValue>
         </StatCard>
-        <StatCard bgColor='#f5f3ff'>
+        <StatCard bgcolor='#f5f3ff'>
           <StatLabel>Time Spent</StatLabel>
-          <StatValue>{progressData.timeSpent}</StatValue>
+          <StatValue>{user?.progress?.totalTimeSpent}</StatValue>
         </StatCard>
-        <StatCard bgColor='#fefce8'>
+        <StatCard bgcolor='#fefce8'>
           <StatLabel>Engagement Level</StatLabel>
           <StatValue>{progressData.engagementLevel}</StatValue>
         </StatCard>
