@@ -1,8 +1,14 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const fs = require('fs');
+
 const cors = require('cors');
 require('dotenv').config();
-const {MongoClient, ServerApiVersion} = require('mongodb')
+
+// Load the JSON file
+const jsonFilePath = './output.json';
+let jsonData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'));
+
 
 const userRoutes = require('./routes/userRoutes');
 
@@ -33,7 +39,53 @@ mongoose.connection.on('error', (error) => {
     console.error('MongoDB connection error:', error);
 });
 
+
+// mongoose.connection.once('open', async () => {
+//     try {
+//         // Save the entire JSON as one document
+//         await LargeDataModel.create({ data: jsonData });
+//         console.log('JSON data saved successfully!');
+//     } catch (err) {
+//         console.error('Error saving data:', err);
+//     } finally {
+//         mongoose.connection.close();
+//     }
+// });
+
+
+// Endpoint to fetch the entire JSON
+app.get('/data', (req, res) => {
+    res.json(jsonData);
+  });
+  
 app.use('/api/users', userRoutes);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Basic route for testing
 app.get('/', (req, res) => {

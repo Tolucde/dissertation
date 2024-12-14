@@ -32,7 +32,7 @@ const userController = {
         expiresIn: '24h',
       });
 
-      res.status(201).json({ token, message: 'Welcome' });
+      res.status(201).json({ token, user});
     } catch (error) {
       res.status(500).json({ message: 'Server error', error: error.message });
     }
@@ -45,13 +45,13 @@ const userController = {
       // Check if user exists
       const user = await User.findOne({ email });
       if (!user) {
-        return res.status(400).json({ message: 'Invalid credentials' });
+        return res.status(400).json({ message: 'Email account does not exist' });
       }
 
       // Validate password
       const isValidPassword = await bcrypt.compare(password, user.password);
       if (!isValidPassword) {
-        return res.status(400).json({ message: 'Invalid credentials' });
+        return res.status(400).json({ message: 'Wrong password' });
       }
 
       // Create token
@@ -59,7 +59,7 @@ const userController = {
         expiresIn: '24h',
       });
 
-      res.status(201).json({ token, message: 'Welcome back' });
+      res.status(201).json({ token, user });
     } catch (error) {
       res.status(500).json({ message: 'Server error', error: error.message });
     }
