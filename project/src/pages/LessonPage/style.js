@@ -202,3 +202,169 @@ export const QuizButton = styled(Button)`
     background: #1976D2;
   }
 `;
+
+export const FlashcardsSection = styled.div`
+  margin: 2rem 0;
+  padding: 1rem;
+`;
+
+export const FlashcardContainer = styled.div`
+  perspective: 1000px;
+  margin-bottom: 1rem;
+`;
+
+export const Flashcard = styled.div`
+  position: relative;
+  width: 100%;
+  height: 200px;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transform: ${props => props.isFlipped ? 'rotateY(180deg)' : 'rotateY(0)'};
+  transition: transform 0.6s;
+`;
+
+export const CardSide = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  border-radius: 8px;
+  background: ${props => props.isFront ? '#ffffff' : '#f8f9fa'};
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+`;
+
+export const CardFront = styled(CardSide)``;
+
+export const CardBack = styled(CardSide)`
+  transform: rotateY(180deg);
+`;
+
+
+
+
+
+
+export const ProgressBar = styled.div`
+  background: #f0f0f0;
+  padding: 10px;
+  border-radius: 4px;
+  text-align: center;
+`;
+
+export const QuizSection = styled.div`
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid ${props => props.theme.colors.border};
+`;
+
+export const QuizQuestion = styled.div`
+  margin-bottom: 20px;
+`;
+
+export const QuestionText = styled.p`
+  font-weight: bold;
+  margin-bottom: 10px;
+`;
+
+export const OptionsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
+
+export const OptionButton = styled.button`
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: ${props => props.selected ? '#e3f2fd' : 'white'};
+  cursor: ${props => props.disabled ? 'default' : 'pointer'};
+  text-align: left;
+  
+  &:hover {
+    background: ${props => props.disabled ? null : '#f5f5f5'};
+  }
+`;
+
+export const SubmitButton = styled.button`
+  padding: 12px 24px;
+  background: #2196f3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  
+  &:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+  }
+`;
+
+export const ResultsSection = styled.div`
+  margin-top: 20px;
+  text-align: center;
+`;
+
+export const ScoreDisplay = styled.div`
+  font-size: 24px;
+  margin-bottom: 20px;
+`;
+
+export const NextLessonButton = styled(SubmitButton)`
+  background: #4caf50;
+`;
+
+export const RetryButton = styled(SubmitButton)`
+  background: #f44336;
+`;
+
+export const DifficultyBadge = styled.span`
+  background: #e3f2fd;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 14px;
+  margin-bottom: 10px;
+  display: inline-block;
+`;
+
+export const CourseContainer = styled.div`
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+`;
+
+ export const Title = styled.h1`
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 20px;
+`;
+
+export const Section = styled.section`
+  margin: 20px 0;
+`;
+
+export  const SectionTitle = styled.h2`
+  font-size: 1.5rem;
+  color: #444;
+  margin-bottom: 15px;
+`;
+
+export const LessonCard = styled.div`
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+`;
+
+
+
+export const Description = styled.p`
+  line-height: 1.6;
+  color: #666;
+`;
+

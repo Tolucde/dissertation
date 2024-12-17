@@ -1,60 +1,100 @@
 // project/src/pages/Lesson/index.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, memo } from 'react';
+import { useLocation } from 'react-router-dom';
+
+import { useAppContext } from '../../AppContext';
 import { FiClock, FiBookmark, FiDownload, FiAward, FiHeart } from 'react-icons/fi';
 import {
   LessonContainer,
   LessonHeader,
   LessonTitle,
   ProgressIndicator,
-  LessonContent,
-  LessonText,
-  BulletPoints,
-  TimeTracker,
-  GamificationSection,
-  Badge,
-  Streak,
-  XPCounter,
   ActionButtons,
-  Button,
   BookmarkButton,
   DownloadPDF,
-  QuizButton
+  QuizButton,
+  
 } from './style';
+import LessonContent from './LessonContent';
+import GamificationSection from './GamificationSection';
+import Flashcards from './Flashcards';
+import TimeTracker from './TimeTracker';
+import { LoadingContainer, LoadingSpinner } from '../../sharedStyles';
+
+const lessonContent = {
+  id: 1,
+  title: 'Introduction to React Fundamentals',
+  totalLessons: 10,
+  currentLesson: 3,
+  content: `React components are the building blocks of any React application. They are
+    reusable pieces of code that return HTML elements. Components can be either
+    class-based or function-based, with function components being the more
+    modern approach.`,
+  keyPoints: [
+    'Components are reusable UI elements',
+    'They can accept props as inputs',
+    'Components can maintain their own state',
+    'React uses a virtual DOM for efficient rendering',
+    'Components follow a unidirectional data flow'
+  ],
+  xpReward: 50,
+  pdfUrl: '/path-to-pdf',
+  flashcards: [
+    {
+      question: "What are React Components?",
+      answer: "Reusable pieces of code that return HTML elements and can be used to build user interfaces."
+    },
+    {
+      question: "What is the difference between class and function components?",
+      answer: "Function components are the modern approach, using hooks for state management, while class components use lifecycle methods."
+    },
+    {
+      question: "What is the Virtual DOM?",
+      answer: "A lightweight copy of the actual DOM that React uses to optimize rendering performance."
+    }
+  ],
+};
 
 const LessonPage = () => {
+  const { generateCourse } = useAppContext();
+  const memoizedGenerateCourse = useCallback(generateCourse, []);
+
+  const location = useLocation();
+  const  courseTitle  = location.state.courseTitle;
+  // const [lessons, setLessons] = useState([]);''
   const [timeSpent, setTimeSpent] = useState(0);
+  const [hasGenerated, setHasGenerated] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
+  const [currentLesson, setCurrentLesson] = useState(0);
+const [isLoading, setIsLoading] = useState(true);
+const [lesson, setLesson] = useState([]);
   const [currentProgress, setCurrentProgress] = useState(30);
 
+  console.log(isLoading)
+  
 
-  // project/src/pages/Lesson/lessonConfig.js
- const lessonContent = {
-    id: 1,
-    title: 'Introduction to React Fundamentals',
-    totalLessons: 10,
-    currentLesson: 3,
-    content: `React components are the building blocks of any React application. They are
-      reusable pieces of code that return HTML elements. Components can be either
-      class-based or function-based, with function components being the more
-      modern approach.`,
-    keyPoints: [
-      'Components are reusable UI elements',
-      'They can accept props as inputs',
-      'Components can maintain their own state',
-      'React uses a virtual DOM for efficient rendering',
-      'Components follow a unidirectional data flow'
-    ],
-    xpReward: 50,
-    pdfUrl: '/path-to-pdf'
-  };
-  // Timer effect
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeSpent(prev => prev + 1);
-    }, 1000);
+ 
 
-    return () => clearInterval(timer);
+  const [flippedCards, setFlippedCards] = useState(
+    new Array(lessonContent.flashcards.length).fill(false)
+  );
+
+  // Memoize handlers with useCallback
+  const handleFlipCard = useCallback((index) => {
+    setFlippedCards(prev => {
+      const newFlipped = [...prev];
+      newFlipped[index] = !newFlipped[index];
+      return newFlipped;
+    });
   }, []);
+  // Timer effect
+  // useEffect(() => {
+  //   const timer = setInterval(() => {
+  //     setTimeSpent(prev => prev + 1);
+  //   }, 1000);
+
+  //   return () => clearInterval(timer);
+  // }, []);
 
   const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60);
@@ -77,55 +117,61 @@ const LessonPage = () => {
     console.log('Navigating to quiz...');
   };
 
+
+  useEffect(() => {
+    const generateLessons = async () => {
+      console.log('generating lessons')
+      // if (hasGenerated) {
+      //   setIsLoading(false);
+      //   return;
+      // }
+      setIsLoading(true);
+  
+      try {
+        const response = await memoizedGenerateCourse(courseTitle);
+        if (!!response) setIsLoading(false);
+        console.log(JSON.parse(response));
+        const lessonsResponse = JSON.parse(response);
+        setLesson(lessonsResponse.lessons);
+        setHasGenerated(true);
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Failed to generate course:', error);
+        setIsLoading(true);
+      } finally {
+        // setIsLoading(false);
+      }
+    };
+  
+    generateLessons();
+  }, [courseTitle, memoizedGenerateCourse]); 
+
+  if (isLoading) {
+    return (
+      <LoadingContainer>
+        <LoadingSpinner />
+      </LoadingContainer>
+    );
+  }
+
   return (
     <LessonContainer>
       <LessonHeader>
-        <LessonTitle>Introduction to React Fundamentals</LessonTitle>
+        <LessonTitle>{lesson[currentLesson]?.title}</LessonTitle>
         <ProgressIndicator>
-          <span>Lesson 3 of 10</span>
+          <span>Lesson {currentLesson + 1} of {lesson.length}</span>
           <div className="progress-bar">
             <div className="fill" style={{ width: `${currentProgress}%` }} />
           </div>
         </ProgressIndicator>
       </LessonHeader>
 
-      <LessonContent>
-        <TimeTracker>
-          <FiClock />
-          <span>Time spent: {formatTime(timeSpent)}</span>
-        </TimeTracker>
+        {/* <TimeTracker timeSpent={timeSpent} /> */}
 
-        <LessonText>
-          <h2>Understanding React Components</h2>
-          <p>
-            React components are the building blocks of any React application. They are
-            reusable pieces of code that return HTML elements. Components can be either
-            class-based or function-based, with function components being the more
-            modern approach.
-          </p>
-        </LessonText>
+       <LessonContent content={lesson[currentLesson]?.actual_lesson} keyPoints={lesson[currentLesson]?.summary} />
 
-        <BulletPoints>
-          <li>Components are reusable UI elements</li>
-          <li>They can accept props as inputs</li>
-          <li>Components can maintain their own state</li>
-          <li>React uses a virtual DOM for efficient rendering</li>
-          <li>Components follow a unidirectional data flow</li>
-        </BulletPoints>
-
-        <GamificationSection>
-          <Badge>
-            <FiAward size={24} />
-            <span>React Rookie</span>
-          </Badge>
-          <Streak>
-            <FiHeart />
-            <span>5 Day Streak!</span>
-          </Streak>
-          <XPCounter>
-            +50 XP
-          </XPCounter>
-        </GamificationSection>
+       <Flashcards flashcards={lesson[currentLesson]?.flashcards} flippedCards={flippedCards} onFlipCard={handleFlipCard} />
+       <GamificationSection streak={5} xp={50} badgeTitle="React Rookie" />
 
         <ActionButtons>
           <BookmarkButton onClick={handleBookmark}>
@@ -142,9 +188,8 @@ const LessonPage = () => {
             Take Quiz
           </QuizButton>
         </ActionButtons>
-      </LessonContent>
     </LessonContainer>
   );
 };
 
-export default LessonPage;
+export default memo(LessonPage);

@@ -1,4 +1,6 @@
 import styled from 'styled-components'
+import { useNavigate } from 'react-router-dom';
+
 import SearchBar from '../../components/SearchBar'
 import ProgressOverview from '../../components/ProgressOverview'
 import Recommendations from '../../components/Recommendations'
@@ -39,6 +41,7 @@ const WideSection = styled.div`
 `
 
 const Dashboard = () => {
+  const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem('user'))
 
   return (

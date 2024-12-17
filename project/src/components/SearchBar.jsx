@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+
 import { Card } from '../sharedStyles';
 
 const SearchContainer = styled(Card)`
@@ -75,11 +77,20 @@ const ViewMoreButton = styled.button`
 `;
 
 const SearchBar = () => {
+  const navigate = useNavigate();
+
   const [courses, setCourses] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredCourses, setFilteredCourses] = useState([]);
   const [visibleCourses, setVisibleCourses] = useState(8);
 
+  const handleCourseSelect = (course) => {
+    navigate('/lessonPage', { 
+      state: { 
+        courseTitle: course['Course Name']
+      }
+    });
+  };
   // Fetch courses from the API
   useEffect(() => {
     const fetchCourses = async () => {
@@ -130,7 +141,10 @@ const SearchBar = () => {
         filteredCourses.length > 0 ? (
           <ResultsContainer>
             {filteredCourses.slice(0, visibleCourses).map((course, index) => (
-              <ResultItem key={index}>{course['Course Name']}</ResultItem>
+              <ResultItem key={index}
+              onClick={() => handleCourseSelect(course)}
+                style={{ cursor: 'pointer' }}
+              >{course['Course Name']}</ResultItem>
             ))}
             {visibleCourses < filteredCourses.length && (
               <ViewMoreButton onClick={handleViewMore}>View More</ViewMoreButton>

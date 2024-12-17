@@ -1,64 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Configuration, OpenAIApi } from 'openai';
 import styled from 'styled-components';
-
-// Styled Components
-const CourseContainer = styled.div`
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-`;
-
-const Section = styled.section`
-  margin-bottom: 30px;
-`;
-
-const Title = styled.h1`
-  color: #333;
-  font-size: 2.5rem;
-  margin-bottom: 20px;
-`;
-
-const SectionTitle = styled.h2`
-  color: #333;
-  font-size: 1.8rem;
-  margin-bottom: 15px;
-`;
-
-const LessonTitle = styled.h3`
-  color: #333;
-  font-size: 1.4rem;
-  margin-bottom: 10px;
-`;
-
-const Description = styled.p`
-  line-height: 1.6;
-  color: #444;
-`;
-
-const ObjectivesList = styled.ul`
-  padding-left: 20px;
-  list-style-type: disc;
-`;
-
-const ObjectiveItem = styled.li`
-  margin-bottom: 8px;
-  line-height: 1.4;
-`;
-
-const LessonCard = styled.div`
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 15px;
-  margin: 10px 0;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-  transition: transform 0.2s ease;
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  }
-`;
+import { DifficultyBadge, RetryButton, NextLessonButton, OptionButton, Description, LessonCard, Title, CourseContainer,  Section, SubmitButton, ScoreDisplay, ResultsSection, OptionsContainer, QuestionText, QuizQuestion, FlashcardsSection, FlashcardContainer, Flashcard, CardFront, CardBack, SectionTitle, ProgressBar } from './style';
 
 const LoadingContainer = styled.div`
   text-align: center;
@@ -73,14 +16,6 @@ const ErrorContainer = styled.div`
   color: #ff4444;
   font-size: 1.2rem;
 `;
-
-const CourseDetails = styled.div`
-  background-color: #f8f9fa;
-  padding: 15px;
-  border-radius: 8px;
-  margin-top: 20px;
-`;
-
 // Configure OpenAI
 const configuration = new Configuration({
   apiKey: process.env.REACT_APP_OPENAI_API_KEY,
@@ -88,6 +23,19 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 function CourseGenerator({ courseTitle }) {
+  const [currentLessonIndex, setCurrentLessonIndex] = useState(0);
+const [quizScore, setQuizScore] = useState(0);
+const [quizSubmitted, setQuizSubmitted] = useState(false);
+const [userAnswers, setUserAnswers] = useState({});
+  const [flippedCards, setFlippedCards] = useState({});
+
+  const handleFlipCard = (index) => {
+    setFlippedCards(prev => ({
+      ...prev,
+      [index]: !prev[index]
+    }));
+  };
+
   const [courseContent, setCourseContent] = useState({
     title: courseTitle,
     description: '',
@@ -113,7 +61,7 @@ function CourseGenerator({ courseTitle }) {
         }],
         max_tokens: 200,
       });
-
+  
       // Generate course objectives
       const objectivesResponse = await openai.createCompletion({
         model: "gpt-3.5-turbo",
@@ -123,42 +71,128 @@ function CourseGenerator({ courseTitle }) {
         }],
         max_tokens: 200,
       });
-
-      // Generate lessons
+  
+      // Generate lessons with increasing difficulty and quizzes
       const lessonsResponse = await openai.createCompletion({
         model: "gpt-3.5-turbo",
         messages: [{
           role: "user",
-          content: `Generate 5 lesson titles and brief descriptions for a course titled "${courseTitle}"`
+          content: `Generate 3 lessons for "${courseTitle}" with increasing difficulty levels.
+            For each lesson, provide:
+            - Title
+            - Difficulty Level (Beginner/Intermediate/Advanced)
+            - Description
+            - Quiz with 10 multiple choice questions
+  
+            Format as:
+            LESSON:
+            Title: [lesson title]
+            Difficulty: [level]
+            Description: [detailed lesson description]
+            
+            QUIZ:
+            Q1: [question]
+            A) [option]
+            B) [option]
+            C) [option]
+            D) [option]
+            Correct: [A/B/C/D]
+            
+            [Repeat for Q2-Q10 in same format]`
         }],
-        max_tokens: 500,
+        max_tokens: 2000,
       });
-
+  
       // Parse and format the responses
       const description = descriptionResponse.data.choices[0].message.content;
       const objectives = objectivesResponse.data.choices[0].message.content
         .split('\n')
         .filter(obj => obj.trim());
-      const lessons = parseLessons(lessonsResponse.data.choices[0].message.content);
+      const lessons = parseLessonsAndQuizzes(lessonsResponse.data.choices[0].message.content);
+  
+      const flashcardsResponse = await openai.createCompletion({
+        model: "gpt-3.5-turbo",
+        messages: [{
+          role: "user",
+          content: `Generate 5 flashcards for the lesson "${courseTitle}". 
+            Format as:
+            Q: [question]
+            A: [answer]`
+        }],
+        max_tokens: 500,
+      });
+
+      // Parse flashcards
+      const flashcards = parseFlashcards(flashcardsResponse.data.choices[0].message.content);
+      
 
       setCourseContent({
         title: courseTitle,
         description,
         objectives,
-        lessons,
-        duration: '8 weeks',
+        lessons: lessons.map(lesson => ({
+          ...lesson,
+          flashcards: flashcards
+        })),
+        duration: '3 weeks',
         loading: false,
         error: null
       });
-
+  
     } catch (error) {
-      setCourseContent(prev => ({
-        ...prev,
-        loading: false,
-        error: 'Failed to generate course content'
-      }));
-      console.error('Error generating course content:', error);
+      if (error.response) {
+        setCourseContent(prev => ({
+          ...prev,
+          loading: false,
+          error: `API Error: ${error.response.status} - ${error.response.data.error}`
+        }));
+      } else {
+        setCourseContent(prev => ({
+          ...prev,
+          loading: false,
+          error: `Error: ${error.message}`
+        }));
+      }
     }
+
+  };
+  
+  const parseLessonsAndQuizzes = (lessonsText) => {
+    const lessonBlocks = lessonsText.split('LESSON:').filter(block => block.trim());
+    
+    return lessonBlocks.map(block => {
+      const [lessonPart, quizPart] = block.split('QUIZ:');
+      
+      // Parse lesson information
+      const titleMatch = lessonPart.match(/Title:\s*(.+)/);
+      const difficultyMatch = lessonPart.match(/Difficulty:\s*(.+)/);
+      const descriptionMatch = lessonPart.match(/Description:\s*(.+)/);
+  
+      // Parse quiz questions
+      const quizQuestions = quizPart.split(/Q\d+:/).filter(q => q.trim()).map(question => {
+        const lines = question.trim().split('\n');
+        const questionText = lines[0].trim();
+        const options = {
+          A: lines[1].replace('A)', '').trim(),
+          B: lines[2].replace('B)', '').trim(),
+          C: lines[3].replace('C)', '').trim(),
+        };
+        const correctAnswer = lines[4].replace('Correct:', '').trim();
+  
+        return {
+          question: questionText,
+          options,
+          correctAnswer
+        };
+      });
+  
+      return {
+        title: titleMatch ? titleMatch[1].trim() : '',
+        difficulty: difficultyMatch ? difficultyMatch[1].trim() : '',
+        description: descriptionMatch ? descriptionMatch[1].trim() : '',
+        quiz: quizQuestions
+      };
+    });
   };
 
   const parseLessons = (lessonsText) => {
@@ -180,107 +214,148 @@ function CourseGenerator({ courseTitle }) {
     return <ErrorContainer>Error: {courseContent.error}</ErrorContainer>;
   }
 
+  const handleAnswerSelect = (questionIndex, answer) => {
+    setUserAnswers(prev => ({
+      ...prev,
+      [questionIndex]: answer
+    }));
+  };
+  
+  const handleQuizSubmit = () => {
+    const currentLesson = courseContent.lessons[currentLessonIndex];
+    let score = 0;
+    
+    currentLesson.quiz.forEach((question, index) => {
+      if (userAnswers[index] === question.correctAnswer) {
+        score++;
+      }
+    });
+    
+    setQuizScore(score);
+    setQuizSubmitted(true);
+  };
+  
+  const handleNextLesson = () => {
+    if (quizScore >= 7) {
+      setCurrentLessonIndex(prev => prev + 1);
+      setQuizSubmitted(false);
+      setUserAnswers({});
+      setQuizScore(0);
+    }
+  };
+
+  const parseFlashcards = (flashcardsText) => {
+    const cards = flashcardsText.split('\n\n');
+    return cards.map(card => {
+      const [question, answer] = card.split('\nA: ');
+      return {
+        question: question.replace('Q: ', '').trim(),
+        answer: answer.trim()
+      };
+    });
+  };
+
   return (
     <CourseContainer>
-      <Title>{courseContent.title}</Title>
-      
-      <Section>
-        <SectionTitle>Course Description</SectionTitle>
-        <Description>{courseContent.description}</Description>
-      </Section>
+    <Title>{courseContent.title}</Title>
+    
+    <Section>
+      <SectionTitle>Course Progress</SectionTitle>
+      <ProgressBar>
+        Lesson {currentLessonIndex + 1} of {courseContent.lessons.length}
+      </ProgressBar>
+    </Section>
 
+    {courseContent.lessons[currentLessonIndex] && (
       <Section>
-        <SectionTitle>Learning Objectives</SectionTitle>
-        <ObjectivesList>
-          {courseContent.objectives.map((objective, index) => (
-            <ObjectiveItem key={index}>{objective}</ObjectiveItem>
+        <LessonCard>
+          <LessonTitle>
+            {courseContent.lessons[currentLessonIndex].title}
+          </LessonTitle>
+          <DifficultyBadge>
+            {courseContent.lessons[currentLessonIndex].difficulty}
+          </DifficultyBadge>
+          <Description>
+            {courseContent.lessons[currentLessonIndex].description}
+          </Description>
+
+          <FlashcardsSection>
+          <SectionTitle>Review Flashcards</SectionTitle>
+          {courseContent.lessons[currentLessonIndex]?.flashcards?.map((card, index) => (
+            <FlashcardContainer key={index}>
+              <Flashcard
+                isFlipped={flippedCards[index]}
+                onClick={() => handleFlipCard(index)}
+              >
+                <CardFront isFront={true}>
+                  <h4>{card.question}</h4>
+                </CardFront>
+                <CardBack>
+                  <p>{card.answer}</p>
+                </CardBack>
+              </Flashcard>
+            </FlashcardContainer>
           ))}
-        </ObjectivesList>
-      </Section>
+        </FlashcardsSection>
 
-      <Section>
-        <SectionTitle>Lessons</SectionTitle>
-        {courseContent.lessons.map((lesson, index) => (
-          <LessonCard key={index}>
-            <LessonTitle>{lesson.title}</LessonTitle>
-            <Description>{lesson.description}</Description>
-          </LessonCard>
-        ))}
-      </Section>
+          <QuizSection>
+            <SectionTitle>Lesson Quiz</SectionTitle>
+            {courseContent.lessons[currentLessonIndex].quiz.map((q, qIndex) => (
+              <QuizQuestion key={qIndex}>
+                <QuestionText>
+                  {qIndex + 1}. {q.question}
+                </QuestionText>
+                <OptionsContainer>
 
-      <Section>
-        <SectionTitle>Course Details</SectionTitle>
-        <CourseDetails>
-          <Description>Duration: {courseContent.duration}</Description>
-        </CourseDetails>
-      </Section>
-    </CourseContainer>
+    {Object.entries(q.options).map(([option, text]) => (
+      <OptionButton
+        key={option}
+        selected={userAnswers[qIndex] === option}
+        disabled={quizSubmitted}
+        onClick={() => handleAnswerSelect(qIndex, option)}
+      >
+        {option}) {text}
+      </OptionButton>
+    ))}
+  </OptionsContainer>
+</QuizQuestion>
+))}
+
+{!quizSubmitted ? (
+<SubmitButton 
+  onClick={handleQuizSubmit}
+  disabled={Object.keys(userAnswers).length < 10}
+>
+  Submit Quiz
+</SubmitButton>
+) : (
+<ResultsSection>
+  <ScoreDisplay>
+    Your Score: {quizScore}/10
+  </ScoreDisplay>
+  {quizScore >= 7 ? (
+    <NextLessonButton onClick={handleNextLesson}>
+      Continue to Next Lesson
+    </NextLessonButton>
+  ) : (
+    <RetryButton onClick={() => {
+      setQuizSubmitted(false);
+      setUserAnswers({});
+    }}>
+      Retry Quiz
+    </RetryButton>
+  )}
+</ResultsSection>
+)}
+</QuizSection>
+</LessonCard>
+</Section>
+)}
+</CourseContainer>
   );
 }
 
 export default CourseGenerator;
 
 
-import CourseGenerator from './CourseGenerator';
 
-function App() {
-  return (
-    <div className="App">
-      <CourseGenerator courseTitle="Introduction to React Development" />
-    </div>
-  );
-}
-
-
-import { ThemeProvider } from 'styled-components';
-
-const theme = {
-  colors: {
-    primary: '#333',
-    secondary: '#666',
-    error: '#ff4444',
-    border: '#ddd',
-  },
-  spacing: {
-    small: '8px',
-    medium: '16px',
-    large: '24px',
-  },
-  // ... more theme variables
-};
-
-// Wrap your app with ThemeProvider
-<ThemeProvider theme={theme}>
-  <CourseGenerator courseTitle="Introduction to React Development" />
-</ThemeProvider>
-
-
-
-const CourseContainer = styled.div`
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-
-  @media (max-width: 768px) {
-    padding: 10px;
-  }
-`;
-
-
-const LoadingAnimation = styled.div`
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-  
-  animation: spin 1s linear infinite;
-`;
-
-const LoadingAnimation = styled.div`
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-  
-  animation: spin 1s linear infinite;
-`;
