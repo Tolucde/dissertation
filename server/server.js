@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const fs = require('fs');
 
+const lessonRoutes = require('./routes/lessonRoutes');
 const cors = require('cors');
 require('dotenv').config();
 
@@ -59,6 +60,7 @@ app.get('/data', (req, res) => {
   });
   
 app.use('/api/users', userRoutes);
+app.use('/api/lessons', lessonRoutes);
 
 
 
