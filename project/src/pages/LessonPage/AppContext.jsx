@@ -10,7 +10,6 @@ export const AppProvider = ({ children }) => {
     return savedUser ? JSON.parse(savedUser) : null;
   });
   const [searchQuery, setSearchQuery] = useState('');
-  const [currentLesson, setCurrentLesson] = useState(0);
   const [isGenerating, setIsGenerating] = useState(false);
   const [generationError, setGenerationError] = useState(null);
 
@@ -32,8 +31,7 @@ export const AppProvider = ({ children }) => {
       
       // If course exists, return it
       if (checkResponse.ok && checkData.data) {
-        console.log(checkData)
-        return checkData;
+        return checkData.data;
       }
   
       // If course doesn't exist, generate it
@@ -70,9 +68,8 @@ export const AppProvider = ({ children }) => {
     if (!saveResponse.ok) {
       console.error('Failed to save course to database');
     }
-    console.log(parsedLessons)
-      return parsedLessons.lessons; // Return the generated lessons
 
+      return parsedLessons.lessons; // Return the generated lessons
     } catch (error) {
       setGenerationError(error.message);
       throw error;
@@ -102,9 +99,7 @@ export const AppProvider = ({ children }) => {
     setSearchQuery,
     isGenerating,
     generationError,
-    generateCourse,
-    currentLesson,
-    setCurrentLesson
+    generateCourse
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
@@ -124,7 +119,7 @@ export const useAppContext = () => {
 // const handleGenerateCourse = async () => {
 //   try {
 //     const lessons = await generateCourse('Your Course Title');
-//     console.log(lessons);
+//     bgcolor(lessons);
 //   } catch (error) {
 //     console.error('Failed to generate course:', error);
 //   }

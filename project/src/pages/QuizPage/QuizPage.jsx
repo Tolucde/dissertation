@@ -1,56 +1,49 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useAppContext } from '../../AppContext';
+
 import {
   QuizContainer,
   Header,
   Title,
   Progress,
-  Timer,
   QuestionSection,
-  Question,
-  AnswerOptions,
-  AnswerOption,
-  HintSection,
-  HintText,
   FeedbackText,
-  Navigation,
-  Button,
-  DialogOverlay,
-  DialogContent
 } from './styles';
+import QuizHint from './QuizHint';
+import QuestionContent from './QuestionContent';
+import QuizNavigation from './QuizNavigate';
+import SubmitDialog from './SubmitDialog';
+import ResultsModal from './ResultsModal';
 
 const QuizPage = () => {
-  // Sample quiz data - in real app, this would come from an API or props
-  const quizData = {
-    title: "Lesson 3 Quiz",
-    timeLimit: 600,
-    questions: [
-      {
-        id: 1,
-        text: "What is the capital of France?",
-        type: "multiple-choice",
-        options: ["London", "Berlin", "Paris", "Madrid"],
-        correctAnswer: "Paris",
-        hint: "This city is known as the City of Light"
-      },
-      // Add more questions as needed
-    ]
-  };
+  const API_URL = import.meta.env.VITE_API_URL;
+const {_id: userId, name} = JSON.parse(localStorage.getItem('user'));
+
+const {currentLesson, setCurrentLesson} = useAppContext();
+  const {quiz, difficulty, title, courseTitle, courseId, index} = useLocation().state;
+  console.log(useLocation().state)
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState({});
   const [showHint, setShowHint] = useState(false);
-  const [timeRemaining, setTimeRemaining] = useState(quizData.timeLimit);
   const [feedback, setFeedback] = useState("");
   const [isSubmitDialogOpen, setIsSubmitDialogOpen] = useState(false);
+  const [showResultsModal, setShowResultsModal] = useState(false);
+  const [quizScore, setQuizScore] = useState(null);
 
-  useEffect(() => {
-    if (timeRemaining > 0) {
-      const timer = setInterval(() => {
-        setTimeRemaining((prev) => prev - 1);
-      }, 1000);
-      return () => clearInterval(timer);
-    }
-  }, [timeRemaining]);
+
+  const navigate = useNavigate();
+
+  const calculateScore = () => {
+    let correctAnswers = 0;
+    quiz.forEach((question, index) => {
+      if (answers[index] === question.correctAnswer) {
+        correctAnswers++;
+      }
+    });
+    return (correctAnswers / quiz.length) * 100;
+  };
 
   const handleAnswerSelect = (answer) => {
     setAnswers({
@@ -61,7 +54,7 @@ const QuizPage = () => {
   };
 
   const handleNext = () => {
-    if (currentQuestion < quizData.questions.length - 1) {
+    if (currentQuestion < quiz.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
       setShowHint(false);
       setFeedback("");
@@ -77,18 +70,55 @@ const QuizPage = () => {
   };
 
   const handleSubmit = () => {
-    if (Object.keys(answers).length < quizData.questions.length) {
+    if (Object.keys(answers).length < quiz.length) {
       alert("Please answer all questions before submitting.");
       return;
     }
     setIsSubmitDialogOpen(true);
   };
 
-  const confirmSubmit = () => {
-    console.log("Quiz submitted:", answers);
+  const confirmSubmit = async () => {
+    console.log(courseId)
+    try {
+      const score = calculateScore();
+      const response = await fetch(`${API_URL}/quiz/submit`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          lessonId: courseId,
+          quizIndex: currentQuestion,
+          score: score,
+          userId
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to submit quiz');
+      }
+
+      setQuizScore(score);
+      setFeedback(`${name}, Your score: ${score}%`);
+      setShowResultsModal(true);
+      
+
+    } catch (error) {
+      console.error('Error submitting quiz:', error);
+      alert('Failed to submit quiz. Please try again.');
+    }
     setIsSubmitDialogOpen(false);
   };
 
+  const handlePreviousLesson = () => {
+    setCurrentLesson((prev) => prev - 1)
+    navigate('/lessonPage',{state:{ courseTitle, difficulty}})
+  };
+
+  const handleNextLesson = () => {
+    setCurrentLesson((prev) => prev + 1)
+    navigate('/lessonPage',{state:{ courseTitle, difficulty}})
+  };
   const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
@@ -97,45 +127,42 @@ const QuizPage = () => {
 
   return (
     <QuizContainer>
+ {/* ... existing JSX ... */}
+
+ {showResultsModal && (
+        <ResultsModal
+          score={quizScore}
+          totalQuestions={quiz.length}
+          onPreviousLesson={handlePreviousLesson}
+          onNextLesson={handleNextLesson}
+          onClose={() => setShowResultsModal(false)}
+        />
+      )}
+      
+      {/* ... existing JSX ... */}
+
       <Header>
-        <Title>{quizData.title}</Title>
+        <Title>{title}</Title>
         <Progress>
-          Question {currentQuestion + 1} of {quizData.questions.length}
+          Question {currentQuestion + 1} of {quiz.length}
         </Progress>
-        <Timer>
+        {/* <Timer>
           Time Remaining: {formatTime(timeRemaining)}
-        </Timer>
+        </Timer> */}
       </Header>
 
       <QuestionSection>
-        <Question>
-          <h2>Question {currentQuestion + 1}</h2>
-          <p>{quizData.questions[currentQuestion].text}</p>
-          
-          <AnswerOptions>
-            {quizData.questions[currentQuestion].options.map((option, index) => (
-              <AnswerOption key={index}>
-                <input
-                  type="radio"
-                  name={`question-${currentQuestion}`}
-                  value={option}
-                  checked={answers[currentQuestion] === option}
-                  onChange={() => handleAnswerSelect(option)}
-                />
-                {option}
-              </AnswerOption>
-            ))}
-          </AnswerOptions>
-        </Question>
+      <QuestionContent
+        questionData={quiz[currentQuestion]}
+        currentQuestion={currentQuestion}
+        selectedAnswer={answers[currentQuestion]}
+        onAnswerSelect={handleAnswerSelect}
+      />
 
-        <HintSection>
-          <Button onClick={() => setShowHint(!showHint)}>
-            {showHint ? "Hide Hint" : "Show Hint"}
-          </Button>
-          {showHint && (
-            <HintText>{quizData.questions[currentQuestion].hint}</HintText>
-          )}
-        </HintSection>
+<QuizHint hint={quiz[currentQuestion].hint}
+        showHint={showHint}
+        onToggleHint={() => setShowHint(!showHint)}
+      />
 
         {feedback && (
           <FeedbackText isCorrect={feedback === "correct"}>
@@ -144,37 +171,19 @@ const QuizPage = () => {
         )}
       </QuestionSection>
 
-      <Navigation>
-        <Button 
-          onClick={handlePrevious}
-          disabled={currentQuestion === 0}
-        >
-          Previous
-        </Button>
-        <Button onClick={handleNext}>Skip</Button>
-        <Button 
-          onClick={handleNext}
-          disabled={currentQuestion === quizData.questions.length - 1}
-        >
-          Next
-        </Button>
-        <Button 
-          variant="submit"
-          onClick={handleSubmit}
-        >
-          Submit Quiz
-        </Button>
-      </Navigation>
+      <QuizNavigation
+        onPrevious={handlePrevious}
+        onNext={handleNext}
+        onSubmit={handleSubmit}
+        currentQuestion={currentQuestion}
+        totalQuestions={quiz.length}
+      />
 
-      {isSubmitDialogOpen && (
-        <DialogOverlay>
-          <DialogContent>
-            <h3>Are you sure you want to submit?</h3>
-            <p>You cannot change your answers after submission.</p>
-            <Button onClick={confirmSubmit}>Yes, Submit</Button>
-            <Button onClick={() => setIsSubmitDialogOpen(false)}>Cancel</Button>
-          </DialogContent>
-        </DialogOverlay>
+{isSubmitDialogOpen && (
+        <SubmitDialog
+          onConfirm={confirmSubmit}
+          onCancel={() => setIsSubmitDialogOpen(false)}
+        />
       )}
     </QuizContainer>
   );

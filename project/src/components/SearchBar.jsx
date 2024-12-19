@@ -77,6 +77,7 @@ const ViewMoreButton = styled.button`
 `;
 
 const SearchBar = () => {
+  
   const navigate = useNavigate();
 
   const [courses, setCourses] = useState([]);
@@ -87,7 +88,8 @@ const SearchBar = () => {
   const handleCourseSelect = (course) => {
     navigate('/lessonPage', { 
       state: { 
-        courseTitle: course['Course Name']
+        courseTitle: course['Course Name'],
+        difficulty: course['Difficulty Level']
       }
     });
   };

@@ -65,7 +65,6 @@ export const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log(formData)
 
     try {
       if (isLogin) {
@@ -86,7 +85,6 @@ export const Login = () => {
         }
 
         const data = await response.json()
-        console.log(data)
         // Store token in localStorage 
         localStorage.setItem('token', data.token)
 
@@ -120,7 +118,6 @@ export const Login = () => {
         }
 
         const data = await response.json()
-        console.log(data)
         // Store token in localStorage 
         localStorage.setItem('token', data.token)
         

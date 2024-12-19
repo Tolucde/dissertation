@@ -96,7 +96,6 @@ const user = JSON.parse(localStorage.getItem('user'))
   
   const handleLogout = () => {
     // Add logout logic here
-    console.log('Logging out...')
   }
 
   return (

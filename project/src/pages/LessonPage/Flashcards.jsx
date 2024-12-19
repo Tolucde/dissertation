@@ -8,7 +8,6 @@ import {
 } from './style';
 
 const Flashcards = memo(({ flashcards, flippedCards, onFlipCard }) => {
-  console.log(flashcards)
   return (
     <FlashcardsSection>
       <h3>Review Flashcards</h3>

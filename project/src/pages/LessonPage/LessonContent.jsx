@@ -1,16 +1,18 @@
 import React, { memo } from 'react';
+import { marked } from 'marked';
+
 import {
   LessonText,
   BulletPoints
 } from './style';
 
-const LessonContent = memo(({ content, keyPoints }) => {
-    console.log(content, keyPoints)
+const LessonContent = memo(({ content, description, keyPoints }) => {
   return (
     <>
       <LessonText>
-        <h2>Understanding React Components</h2>
-        <p>{content}</p>
+        <h4>{description}</h4>
+        <p dangerouslySetInnerHTML={{ __html: marked(content) }} />
+
       </LessonText>
 
       <BulletPoints>

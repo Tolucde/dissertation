@@ -1,10 +1,11 @@
 // project/src/pages/Lesson/index.jsx
 import React, { useState, useEffect, useCallback, memo } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { useAppContext } from '../../AppContext';
 import { FiClock, FiBookmark, FiDownload, FiAward, FiHeart } from 'react-icons/fi';
 import {
+  CourseTitle,
   LessonContainer,
   LessonHeader,
   LessonTitle,
@@ -13,7 +14,9 @@ import {
   BookmarkButton,
   DownloadPDF,
   QuizButton,
-  
+  LessonPageWrapper,
+  Sidebar,
+  LessonTab,
 } from './style';
 import LessonContent from './LessonContent';
 import GamificationSection from './GamificationSection';
@@ -21,62 +24,29 @@ import Flashcards from './Flashcards';
 import TimeTracker from './TimeTracker';
 import { LoadingContainer, LoadingSpinner } from '../../sharedStyles';
 
-const lessonContent = {
-  id: 1,
-  title: 'Introduction to React Fundamentals',
-  totalLessons: 10,
-  currentLesson: 3,
-  content: `React components are the building blocks of any React application. They are
-    reusable pieces of code that return HTML elements. Components can be either
-    class-based or function-based, with function components being the more
-    modern approach.`,
-  keyPoints: [
-    'Components are reusable UI elements',
-    'They can accept props as inputs',
-    'Components can maintain their own state',
-    'React uses a virtual DOM for efficient rendering',
-    'Components follow a unidirectional data flow'
-  ],
-  xpReward: 50,
-  pdfUrl: '/path-to-pdf',
-  flashcards: [
-    {
-      question: "What are React Components?",
-      answer: "Reusable pieces of code that return HTML elements and can be used to build user interfaces."
-    },
-    {
-      question: "What is the difference between class and function components?",
-      answer: "Function components are the modern approach, using hooks for state management, while class components use lifecycle methods."
-    },
-    {
-      question: "What is the Virtual DOM?",
-      answer: "A lightweight copy of the actual DOM that React uses to optimize rendering performance."
-    }
-  ],
-};
 
 const LessonPage = () => {
-  const { generateCourse } = useAppContext();
+  const navigate = useNavigate();
+  const { generateCourse, currentLesson, setCurrentLesson } = useAppContext();
   const memoizedGenerateCourse = useCallback(generateCourse, []);
 
   const location = useLocation();
-  const  courseTitle  = location.state.courseTitle;
+  const  {courseTitle, difficulty}  = location.state;
   // const [lessons, setLessons] = useState([]);''
   const [timeSpent, setTimeSpent] = useState(0);
   const [hasGenerated, setHasGenerated] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
-  const [currentLesson, setCurrentLesson] = useState(0);
 const [isLoading, setIsLoading] = useState(true);
 const [lesson, setLesson] = useState([]);
-  const [currentProgress, setCurrentProgress] = useState(30);
+const [courseId, setCourseId] = useState();
+  const [currentProgress, setCurrentProgress] = useState(33.33*(currentLesson+1));
 
-  console.log(isLoading)
   
 
  
 
   const [flippedCards, setFlippedCards] = useState(
-    new Array(lessonContent.flashcards.length).fill(false)
+    new Array(lesson[currentLesson]?.flashcards.length).fill(false)
   );
 
   // Memoize handlers with useCallback
@@ -87,7 +57,8 @@ const [lesson, setLesson] = useState([]);
       return newFlipped;
     });
   }, []);
-  // Timer effect
+  
+  //Timer effect
   // useEffect(() => {
   //   const timer = setInterval(() => {
   //     setTimeSpent(prev => prev + 1);
@@ -96,11 +67,11 @@ const [lesson, setLesson] = useState([]);
   //   return () => clearInterval(timer);
   // }, []);
 
-  const formatTime = (seconds) => {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
-  };
+  // const formatTime = (seconds) => {
+  //   const minutes = Math.floor(seconds / 60);
+  //   const remainingSeconds = seconds % 60;
+  //   return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+  // };
 
   const handleBookmark = () => {
     setIsBookmarked(!isBookmarked);
@@ -109,43 +80,45 @@ const [lesson, setLesson] = useState([]);
 
   const handleDownloadPDF = () => {
     // Add logic to download PDF
-    console.log('Downloading PDF...');
+    
   };
 
-  const handleStartQuiz = () => {
-    // Add navigation logic to quiz
-    console.log('Navigating to quiz...');
-  };
-
-
+  console.log(courseId)
   useEffect(() => {
     const generateLessons = async () => {
-      console.log('generating lessons')
       // if (hasGenerated) {
-      //   setIsLoading(false);
-      //   return;
-      // }
-      setIsLoading(true);
-  
-      try {
-        const response = await memoizedGenerateCourse(courseTitle);
-        if (!!response) setIsLoading(false);
-        console.log(JSON.parse(response));
-        const lessonsResponse = JSON.parse(response);
-        setLesson(lessonsResponse.lessons);
-        setHasGenerated(true);
-        setIsLoading(false);
-      } catch (error) {
-        console.error('Failed to generate course:', error);
+        //   setIsLoading(false);
+        //   return;
+        // }
         setIsLoading(true);
-      } finally {
-        // setIsLoading(false);
-      }
+        
+        try {
+          const response = await memoizedGenerateCourse(courseTitle, difficulty);
+          if (!!response) setIsLoading(false);
+          setLesson(response.data);
+          setCourseId(response.courseId);
+          setHasGenerated(true);
+          setIsLoading(false);
+        } catch (error) {
+          console.error('Failed to generate course:', error);
+          setIsLoading(true);
+        } finally {
+          // setIsLoading(false);
+        }
+      };
+      
+      generateLessons();
+    }, [courseTitle, memoizedGenerateCourse]); 
+    
+    const handleStartQuiz = () => {
+      navigate('/quizPage', { state: { quiz: lesson[currentLesson]?.quiz, difficulty, courseTitle,  title: `1. Quiz for ${lesson[currentLesson]?.title}` , courseId} });
     };
-  
-    generateLessons();
-  }, [courseTitle, memoizedGenerateCourse]); 
-
+    
+      const handleLessonChange = (lessonIndex) => {
+        setCurrentLesson(lessonIndex);
+        setCurrentProgress(33.33 * (lessonIndex + 1));
+      };
+    
   if (isLoading) {
     return (
       <LoadingContainer>
@@ -153,10 +126,23 @@ const [lesson, setLesson] = useState([]);
       </LoadingContainer>
     );
   }
-
   return (
+    <LessonPageWrapper>
+    <Sidebar>
+        {lesson.map((item, index) => (
+          <LessonTab
+          key={index}
+          isActive={currentLesson === index}
+          onClick={() => handleLessonChange(index)}
+          >
+            Lesson {index + 1}: {item.title}
+          </LessonTab>
+        ))}
+      </Sidebar>
     <LessonContainer>
       <LessonHeader>
+    <CourseTitle>{courseTitle}</CourseTitle>
+
         <LessonTitle>{lesson[currentLesson]?.title}</LessonTitle>
         <ProgressIndicator>
           <span>Lesson {currentLesson + 1} of {lesson.length}</span>
@@ -168,7 +154,7 @@ const [lesson, setLesson] = useState([]);
 
         {/* <TimeTracker timeSpent={timeSpent} /> */}
 
-       <LessonContent content={lesson[currentLesson]?.actual_lesson} keyPoints={lesson[currentLesson]?.summary} />
+       <LessonContent content={lesson[currentLesson]?.actual_lesson} description={lesson[currentLesson]?.description} keyPoints={lesson[currentLesson]?.summary} />
 
        <Flashcards flashcards={lesson[currentLesson]?.flashcards} flippedCards={flippedCards} onFlipCard={handleFlipCard} />
        <GamificationSection streak={5} xp={50} badgeTitle="React Rookie" />
@@ -189,6 +175,7 @@ const [lesson, setLesson] = useState([]);
           </QuizButton>
         </ActionButtons>
     </LessonContainer>
+    </LessonPageWrapper>
   );
 };
 

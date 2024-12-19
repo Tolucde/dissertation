@@ -6,16 +6,28 @@ export const LessonContainer = styled.div`
   margin: 0 auto;
   padding: 2rem;
   font-family: 'Arial', sans-serif;
+    flex: 1;
+  padding: 20px;
 `;
 
 export const LessonHeader = styled.div`
   margin-bottom: 2rem;
 `;
-
-export const LessonTitle = styled.h1`
-  font-size: 2.5rem;
+export const CourseTitle = styled.h1`
+  font-size: 2rem;
+  margin-bottom: 8px;
+  font-weight: 500;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #e0e0e0;
+  color: #666;
+  `;
+  
+  export const LessonTitle = styled.h2`
   color: #333;
-  margin-bottom: 1rem;
+  margin: 0;
+  padding: 1rem 0;
+  font-weight: 600;
+  font-size: 1.8rem;
 `;
 
 export const ProgressIndicator = styled.div`
@@ -366,5 +378,43 @@ export const LessonCard = styled.div`
 export const Description = styled.p`
   line-height: 1.6;
   color: #666;
+`;
+
+export const LessonPageWrapper = styled.div`
+  display: flex;
+  min-height: 100vh;
+  padding-left: 250px; 
+
+`;
+
+// export const Sidebar = styled.div`
+//   width: 250px;
+//   background-color: #f5f5f5;
+//   padding: 20px 0;
+//   border-right: 1px solid #e0e0e0;
+// `;
+export const Sidebar = styled.div`
+  width: 250px;
+  background-color: #f5f5f5;
+  padding: 20px 0;
+  border-right: 1px solid #e0e0e0;
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto; // Allows scrolling if lesson list is too long
+`;
+
+
+export const LessonTab = styled.div`
+  padding: 15px 20px;
+  cursor: pointer;
+  border-left: 4px solid ${props => props.isActive ? '#4CAF50' : 'transparent'};
+  background-color: ${props => props.isActive ? '#e8f5e9' : 'transparent'};
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: ${props => props.isActive ? '#e8f5e9' : '#eeeeee'};
+  }
 `;
 
