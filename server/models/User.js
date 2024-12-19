@@ -9,17 +9,20 @@ const userSchema = new mongoose.Schema({
     progress: {
         lessonsCompleted: { type: Number, default: 0 },
         currentLesson: { type: mongoose.Schema.Types.ObjectId, ref: 'Lesson' },
+        listOfLessons: [{type: mongoose.Schema.Types.ObjectId, ref: 'Lesson'}],
+
         totalTimeSpent: { type: Number, default: 0 }, // in minutes
       },
-      quizzesTaken: [
+      lessonDetails: [
         {
-          quiz: { type: mongoose.Schema.Types.ObjectId, ref: 'Quiz' }, // Reference to Quiz collection
-          score: Number,
-          attempts: Number,
-          timeTaken: Number,
-          dateTaken: { type: Date, default: Date.now },
-        },
-      ],
+          lessonId: { type: mongoose.Schema.Types.ObjectId, ref: 'Lesson' },
+          quizzes: [
+            {
+              score: { type: Number },
+              index: { type: Number },
+            },
+          ],
+        }],
       createdAt: { type: Date, default: Date.now },
 })
 

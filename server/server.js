@@ -1,18 +1,16 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const fs = require('fs');
+const cors = require('cors');
 
 const lessonRoutes = require('./routes/lessonRoutes');
-const cors = require('cors');
+const quizRoutes = require('./routes/quizRoutes');
+const userRoutes = require('./routes/userRoutes');
 require('dotenv').config();
 
 // Load the JSON file
 const jsonFilePath = './output.json';
 let jsonData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'));
-
-
-const userRoutes = require('./routes/userRoutes');
-
 
 const bodyParser = require('body-parser')
 const app = express();
@@ -61,6 +59,7 @@ app.get('/data', (req, res) => {
   
 app.use('/api/users', userRoutes);
 app.use('/api/lessons', lessonRoutes);
+app.use('/api/quiz', quizRoutes);
 
 
 
