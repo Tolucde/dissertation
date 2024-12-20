@@ -1,8 +1,9 @@
 const express = require('express');
 
 const { generateLessons } = require('../utils/openAIService')
-const Course = require('../models/Lesson');
-
+const Course = require('../models/Course');
+const User = require('../models/User');
+const Lesson = require('../models/Lesson');
 // Route to fetch lessons for a specific course
 exports.generate = async (req, res) => {
   const { courseTitle, difficulty } = req.body;
@@ -27,7 +28,7 @@ exports.findCourse = async (req, res) => {
     // Case-insensitive search for the course
     const course = await Course.findOne({ 
       title: { $regex: new RegExp(`^${courseTitle}$`, 'i') }
-    });
+    }).populate('lessons'); 
 
     if (!course) {
       return res.status(404).json({
@@ -70,21 +71,36 @@ exports.saveCourse = async (req, res) => {
         message: 'Course already exists'
       });
     }
+    const createdLessons = [];
+    for (let lessonData of lessons) {
+      const lesson = new Lesson({
+        title: lessonData.title,
+        description: lessonData.description,
+        actual_lesson: lessonData.actual_lesson,
+        summary: lessonData.summary,
+        flashcards: lessonData.flashcards,
+        quiz: lessonData.quiz,
+      });
 
-    // Create new course
-    const course = new Course({
+      // Save each lesson and push the saved lesson's ID to the createdLessons array
+      const savedLesson = await lesson.save();
+      createdLessons.push(savedLesson._id);
+    }
+
+    // Now, create the course and associate it with the lessons
+    const newCourse = new Course({
       title,
       difficulty,
-      lessons,
-      createdAt: new Date()
+      lessons: createdLessons,  // Store the array of created lesson IDs in the course
     });
 
-    await course.save();
+    // Save the course
+    await newCourse.save();
 
     return res.status(201).json({
       success: true,
       message: 'Course saved successfully',
-      data: course
+      data: newCourse
     });
 
   } catch (error) {
@@ -95,3 +111,45 @@ exports.saveCourse = async (req, res) => {
     });
   }
 };
+
+
+exports.markLessonAsCompleted = async (req, res) => {
+  try {
+    const { userId, courseId, lessonId } = req.body;
+    const user = await User.findById(userId);
+
+    const lessonDetail = user.lessonDetails.find(
+      detail => detail.courseId.toString() === courseId
+    );
+    console.log(lessonDetail.quizzes)
+    // const isAlreadyCompleted = user.completedCourses.some(
+    //   lesson => lesson.lessonId === lessonId
+    // );
+    // if (!isAlreadyCompleted) {
+    //   user.completedLessons.push(lessonId);
+    // }
+
+    // console.log(user)
+    if (lessonDetail) {
+      if (lessonDetail.quizzes.length >= 3) {
+        const isAlreadyCompleted = user.completedCourses.some(
+          course => course.courseId === courseId
+        );
+
+        if (!isAlreadyCompleted) {
+          user.completedCourses.push(courseId);
+        }
+
+        // Save the updated user document
+        await user.save();
+
+        console.log('Lesson marked as completed.');
+      }
+    }
+  } catch (error) {
+    console.error('Error marking lesson as completed:', error);
+  }
+};
+
+
+

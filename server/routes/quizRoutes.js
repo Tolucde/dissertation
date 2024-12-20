@@ -1,9 +1,10 @@
 const express = require('express');
 
 const router = express.Router();
-const { submitQuiz } = require('../controllers/quizController');
+const { submitQuiz, getAverageScore } = require('../controllers/quizController');
 // const auth = require('../middleware/auth'); 
 
 router.post('/submit', submitQuiz);
+router.get('/average/:userId', getAverageScore);
 
 module.exports = router;

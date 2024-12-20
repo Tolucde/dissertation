@@ -1,11 +1,11 @@
 import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom';
 
-import SearchBar from '../../components/SearchBar'
-import ProgressOverview from '../../components/ProgressOverview'
-import Recommendations from '../../components/Recommendations'
-import NavigationButtons from '../../components/NavigationButtons'
-import UserProfile from '../../components/UserProfile'
+import SearchBar from './SearchBar'
+import ProgressOverview from './ProgressOverview'
+import Recommendations from './Recommendations'
+import NavigationButtons from './NavigationButtons'
+import UserProfile from './UserProfile'
 import { useAppContext } from '../../AppContext'
 
 

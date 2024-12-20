@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { Card, Title } from '../sharedStyles'
+import { Card, Title } from '../../sharedStyles'
 
 const ButtonsContainer = styled.div`
   display: flex;

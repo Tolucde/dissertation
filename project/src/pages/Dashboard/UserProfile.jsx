@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { Card } from '../sharedStyles'
+import { Card } from '../../sharedStyles'
 
 const ProfileHeader = styled.div`
   display: flex;

@@ -1,5 +1,7 @@
+import { useState, useEffect } from 'react'
+
 import styled from 'styled-components'
-import { Card, Title } from '../sharedStyles'
+import { Card, Title } from '../../sharedStyles'
 
 const StatsGrid = styled.div`
   display: grid;
@@ -23,9 +25,7 @@ const StatValue = styled.p`
   font-size: 1.5rem;
   font-weight: bold;
   color: #1e293b;
-`
-
-const ProgressOverview = ({ user }) => {
+  `
   const progressData = {
     quizScore: 85,
     lessonsCompleted: 12,
@@ -34,13 +34,36 @@ const ProgressOverview = ({ user }) => {
     engagementLevel: 'High',
   }
 
+const ProgressOverview = ({ user }) => {
+  const VITE_API_URL = import.meta.env.VITE_API_URL
+
+  const [quizAverage, setQuizAverage] = useState(0)
+  const fetchQuizAverage = async () => {
+    try {
+      const response = await fetch(`${VITE_API_URL}/quiz/average/${user._id}`)
+      if (!response.ok) {
+        throw new Error('Failed to fetch quiz average')
+      }
+      const data = await response.json()
+      setQuizAverage(data.averageScore)
+    } catch (error) {
+      console.error('Error fetching quiz average:', error)
+      setQuizAverage(0)
+    }
+  }
+  // Add useEffect to fetch data when component mounts
+  useEffect(() => {
+    if (user?._id) {
+      fetchQuizAverage()
+    }
+  }, [user])
   return (
     <Card>
       <Title>Your Progress</Title>
       <StatsGrid>
         <StatCard bgcolor='#eff6ff'>
           <StatLabel>Quiz Average</StatLabel>
-          <StatValue>{progressData.quizScore}%</StatValue>
+          <StatValue>{quizAverage ? (quizAverage * 10).toFixed(2) : 0}%</StatValue>
         </StatCard>
         <StatCard bgcolor='#f0fdf4'>
           <StatLabel>Lessons Completed</StatLabel>

@@ -10,10 +10,10 @@ import {
 const GamificationSection = memo(({ streak, xp, badgeTitle = 'React Rookie' }) => {
   return (
     <GamificationWrapper>
-      <Badge>
+      {/* <Badge>
         <FiAward size={24} />
         <span>{badgeTitle}</span>
-      </Badge>
+      </Badge> */}
       
       <Streak>
         <FiHeart />

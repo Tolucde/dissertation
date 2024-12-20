@@ -21,7 +21,7 @@ const QuizPage = () => {
 const {_id: userId, name} = JSON.parse(localStorage.getItem('user'));
 
 const {currentLesson, setCurrentLesson} = useAppContext();
-  const {quiz, difficulty, title, courseTitle, courseId, index} = useLocation().state;
+  const {quiz, difficulty, title, courseTitle, courseId, lessonId, index} = useLocation().state;
   console.log(useLocation().state)
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -78,7 +78,6 @@ const {currentLesson, setCurrentLesson} = useAppContext();
   };
 
   const confirmSubmit = async () => {
-    console.log(courseId)
     try {
       const score = calculateScore();
       const response = await fetch(`${API_URL}/quiz/submit`, {
@@ -87,9 +86,10 @@ const {currentLesson, setCurrentLesson} = useAppContext();
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          lessonId: courseId,
+           courseId,
           quizIndex: currentQuestion,
-          score: score,
+          lessonId,
+          score,
           userId
         })
       });
@@ -110,20 +110,16 @@ const {currentLesson, setCurrentLesson} = useAppContext();
     setIsSubmitDialogOpen(false);
   };
 
-  const handlePreviousLesson = () => {
-    setCurrentLesson((prev) => prev - 1)
-    navigate('/lessonPage',{state:{ courseTitle, difficulty}})
-  };
 
-  const handleNextLesson = () => {
-    setCurrentLesson((prev) => prev + 1)
-    navigate('/lessonPage',{state:{ courseTitle, difficulty}})
-  };
-  const formatTime = (seconds) => {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
-  };
+const handlePreviousLesson = () => {
+  setCurrentLesson((prev) => Math.max(0, prev - 1));
+  navigate('/lessonPage', {state: { courseTitle, difficulty }});
+};
+
+const handleNextLesson = () => {
+  setCurrentLesson((prev) => Math.min(2, prev + 1));
+  navigate('/lessonPage', {state: { courseTitle, difficulty }});
+};
 
   return (
     <QuizContainer>
@@ -133,6 +129,7 @@ const {currentLesson, setCurrentLesson} = useAppContext();
         <ResultsModal
           score={quizScore}
           totalQuestions={quiz.length}
+          currentLesson={currentLesson}
           onPreviousLesson={handlePreviousLesson}
           onNextLesson={handleNextLesson}
           onClose={() => setShowResultsModal(false)}

@@ -3,29 +3,24 @@ const mongoose = require('mongoose');
 const lessonSchema = new mongoose.Schema({
   title: {
     type: String,
-    required: true,
-    unique: true
+    required: true
   },
-  difficulty:  String,
-  lessons: [{
-    title: {
-      type: String,
-      required: true
-    },
-    description: String,
-    actual_lesson: String,
-    summary: [String],
-    flashcards: [{
-      front: String,
-      back: String
-    }],
-    quiz: [{
-      question: String,
-      options: [String],
-      correctAnswer: String,
-      hint: String
-    }],
-    
+  description: String,
+  actual_lesson: String,
+  summary: [String],
+  flashcards: [{
+    front: String,
+    back: String
+  }],
+  quiz: [{
+    question: String,
+    options: [String],
+    correctAnswer: String,
+    hint: String,
+    createdAt: { 
+      type: Date, 
+      default: Date.now 
+    }
   }],
   createdAt: {
     type: Date,

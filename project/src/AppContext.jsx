@@ -1,8 +1,9 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-
+import { useNavigate } from 'react-router-dom';
 const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
+
   const VITE_API_URL = import.meta.env.VITE_API_URL;
   // Initialize state from localStorage if it exists
   const [user, setUser] = useState(() => {
@@ -32,8 +33,7 @@ export const AppProvider = ({ children }) => {
       
       // If course exists, return it
       if (checkResponse.ok && checkData.data) {
-        console.log(checkData)
-        return checkData;
+        return checkData.data;
       }
   
       // If course doesn't exist, generate it
@@ -45,8 +45,8 @@ export const AppProvider = ({ children }) => {
         body: JSON.stringify({ courseTitle, difficulty }),
       });
 
+
       const generateData = await generateResponse.json();
-      
       if (!generateResponse.ok) {
         throw new Error(generateData.error || 'Failed to generate course');
       }
@@ -66,12 +66,11 @@ export const AppProvider = ({ children }) => {
       }),
     });
    
-
     if (!saveResponse.ok) {
       console.error('Failed to save course to database');
     }
-    console.log(parsedLessons)
-      return parsedLessons.lessons; // Return the generated lessons
+      return parsedLessons.lessons
+      
 
     } catch (error) {
       setGenerationError(error.message);

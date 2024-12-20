@@ -6,6 +6,8 @@ const cors = require('cors');
 const lessonRoutes = require('./routes/lessonRoutes');
 const quizRoutes = require('./routes/quizRoutes');
 const userRoutes = require('./routes/userRoutes');
+const bookmarkRoutes = require('./routes/bookmarkRoutes');
+
 require('dotenv').config();
 
 // Load the JSON file
@@ -60,7 +62,7 @@ app.get('/data', (req, res) => {
 app.use('/api/users', userRoutes);
 app.use('/api/lessons', lessonRoutes);
 app.use('/api/quiz', quizRoutes);
-
+app.use('/api/bookmarks', bookmarkRoutes);
 
 
 

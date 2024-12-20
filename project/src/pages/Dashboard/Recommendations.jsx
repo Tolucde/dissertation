@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { Card, Title } from '../sharedStyles'
+import { Card, Title } from '../../sharedStyles'
 
 const SectionTitle = styled.h3`
   font-size: 1.125rem;

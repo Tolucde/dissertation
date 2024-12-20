@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const ModalOverlay = styled.div`
@@ -37,7 +38,9 @@ const Button = styled.button`
   // Add your button styles here
 `;
 
-const ResultsModal = ({ score, totalQuestions, onPreviousLesson, onNextLesson, onClose }) => {
+const ResultsModal = ({ score, totalQuestions, onPreviousLesson, onNextLesson, currentLesson, onClose }) => {
+  const navigate = useNavigate();
+
   return (
     <ModalOverlay onClick={onClose}>
       <ModalContent onClick={e => e.stopPropagation()}>
@@ -46,7 +49,11 @@ const ResultsModal = ({ score, totalQuestions, onPreviousLesson, onNextLesson, o
         <p>Correct Answers: {Math.round(score * totalQuestions / 100)} out of {totalQuestions}</p>
         <ButtonContainer>
           <Button onClick={onPreviousLesson}>Previous Lesson</Button>
-          <Button onClick={onNextLesson}>Next Lesson</Button>
+          {currentLesson === 2 ? (
+            <Button onClick={() => navigate('/dashboard')}>Go to Dashboard</Button>
+          ) : (
+            <Button onClick={onNextLesson}>Next Lesson</Button>
+          )}
         </ButtonContainer>
       </ModalContent>
     </ModalOverlay>
