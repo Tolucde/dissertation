@@ -37,7 +37,7 @@ const [courseId, setCourseId] = useState();
   const [currentProgress, setCurrentProgress] = useState(33.33*(currentLesson+1));
 
   
-
+console.log(lesson)
 
   const [flippedCards, setFlippedCards] = useState(
     new Array(lesson[currentLesson]?.flashcards?.length).fill(false)
@@ -67,8 +67,9 @@ const [courseId, setCourseId] = useState();
         try {
           const response = await memoizedGenerateCourse(courseTitle, difficulty);
           if (!!response) setIsLoading(false);
-          setLesson(response);
-          // setCourseId(response.courseId);
+          console.log(response)
+          setLesson(response.lessons);
+          setCourseId(response.courseId);
           setHasGenerated(true);
           setIsLoading(false);
         } catch (error) {
@@ -139,7 +140,7 @@ const [courseId, setCourseId] = useState();
         {/* <TimeTracker timeSpent={timeSpent} /> */}
        <LessonContent content={lesson[currentLesson]?.actual_lesson} description={lesson[currentLesson]?.description} keyPoints={lesson[currentLesson]?.summary} />
        <Flashcards flashcards={lesson[currentLesson]?.flashcards} flippedCards={flippedCards} onFlipCard={handleFlipCard} />
-       <ActionSection lesson={lesson} difficulty={difficulty} courseTitle={courseTitle} currentLesson={currentLesson} courseId={8867} />
+       <ActionSection lesson={lesson} difficulty={difficulty} courseTitle={courseTitle} currentLesson={currentLesson} courseId={courseId} />
     </LessonContainer>
     </LessonPageWrapper>
   );

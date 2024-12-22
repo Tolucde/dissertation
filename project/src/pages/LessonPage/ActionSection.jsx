@@ -37,6 +37,7 @@ const handleBookmark = async () => {
     }
   };
   const handleStartQuiz = () => {
+    console.log(lesson[currentLesson])
     navigate('/quizPage', { state: { quiz: lesson[currentLesson]?.quiz, difficulty, courseTitle,  title: `1. Quiz for ${lesson[currentLesson]?.title}` , lessonId: lesson[currentLesson]?._id, courseId} });
   };
 

@@ -33,7 +33,7 @@ export const AppProvider = ({ children }) => {
       
       // If course exists, return it
       if (checkResponse.ok && checkData.data) {
-        return checkData.data;
+        return {lessons: checkData.data, courseId: checkData.courseId}
       }
   
       // If course doesn't exist, generate it
@@ -69,7 +69,8 @@ export const AppProvider = ({ children }) => {
     if (!saveResponse.ok) {
       console.error('Failed to save course to database');
     }
-      return parsedLessons.lessons
+    const savedCourse = await saveResponse.json()
+      return {lessons: parsedLessons.lessons, courseId: savedCourse.data._id}
       
 
     } catch (error) {
