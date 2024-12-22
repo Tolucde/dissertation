@@ -2,26 +2,32 @@ const User = require('../models/User');
 
 const submitQuiz = async (req, res) => {
   try {
-    const { userId,lessonId, quizIndex, score } = req.body;
+    const { userId, lessonId, courseId, quizIndex, score } = req.body;
+
     const user = await User.findById(userId);
-    
-    // Find the lesson in lessonDetails array
-    let lessonDetail = user.lessonDetails.find(
-      detail => detail.lessonId.toString() === lessonId
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    // Ensure courseDetails is initialized
+    if (!user.courseDetails) {
+      user.courseDetails = [];
+    }
+
+    // Find the course in courseDetails array
+    let courseDetail = user.courseDetails.find(
+      detail => detail.courseId.toString() === courseId
     );
 
-    if (!lessonDetail) {
-      // If lesson doesn't exist in details, create it
-      lessonDetail = {
-        lessonId,
-        quizzes: []
-      };
-      user.lessonDetails.push(lessonDetail);
+    if (!courseDetail) {
+      // If course doesn't exist in details, create it
+      courseDetail = { courseId, quizzes: [] };
+      user.courseDetails.push(courseDetail);
     }
 
     // Find the quiz by index
-    const existingQuiz = lessonDetail.quizzes.find(
-      quiz => quiz.index === quizIndex
+    let existingQuiz = courseDetail.quizzes.find(
+      quiz => quiz.lessonId.toString() === lessonId
     );
 
     if (existingQuiz) {
@@ -29,29 +35,37 @@ const submitQuiz = async (req, res) => {
       existingQuiz.score = Math.max(existingQuiz.score, score); // Keep highest score
     } else {
       // Add new quiz score
-      lessonDetail.quizzes.push({
-        index: quizIndex,
-        score: score
-      });
+      const newQuiz = {
+        quizIndex,
+        lessonId,
+        score,
+      };
+      courseDetail.quizzes.push(newQuiz);
     }
 
+    // Reassign the updated courseDetail back to user.courseDetails
+    user.courseDetails = user.courseDetails.map(detail =>
+      detail.courseId.toString() === courseId ? courseDetail : detail
+    );
+
+    // Save the updated user document
     await user.save();
 
     res.status(200).json({
       success: true,
       message: 'Quiz score submitted successfully',
-      score: score
+      score,
     });
-
   } catch (error) {
     console.error('Error submitting quiz:', error);
     res.status(500).json({
       success: false,
       message: 'Failed to submit quiz score',
-      error: error.message
+      error: error.message,
     });
   }
 };
+
 
 const getAverageScore = async (req, res) => {
   try {

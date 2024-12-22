@@ -13,15 +13,15 @@ const userSchema = new mongoose.Schema({
         listOfCourses: [{type: mongoose.Schema.Types.ObjectId, ref: 'Course'}],
         totalTimeSpent: { type: Number, default: 0 }, // in minutes
       },
-      lessonDetails: [
+      courseDetails: [
         {
-          lessonId: { type: mongoose.Schema.Types.ObjectId, ref: 'Lesson' },
+          courseId: { type: mongoose.Schema.Types.ObjectId, ref: 'Course' },
           quizzes: [
             {
               score: { type: Number },
-              index: { type: Number },
+              quizIndex: { type: Number },
               lessonId: { type: mongoose.Schema.Types.ObjectId, ref: 'Lesson' },
-              courseId: { type: mongoose.Schema.Types.ObjectId, ref: 'Course' },
+              
             },
           ],
         }],
