@@ -13,10 +13,57 @@ exports.generate = async (req, res) => {
   }
 
   try {
-    const lessons = await generateLessons(courseTitle, difficulty);
-    res.status(200).json({ success: true, data: lessons });
+    // Generate lessons
+    let lessons = await generateLessons(courseTitle, difficulty);
+
+    // Check if lessons are a string and parse them into JSON
+    if (typeof lessons === 'string') {
+      try {
+        lessons = JSON.parse(lessons);
+         lessons = lessons.lessons
+      } catch (parseError) {
+        console.error('Error parsing lessons JSON:', parseError);
+        return res.status(400).json({ error: 'Invalid JSON format in lessons data' });
+      }
+    }
+
+    // Save generated course
+    const createdLessons = [];
+    for (const lessonData of lessons) {
+      const lesson = new Lesson({
+        title: lessonData.title,
+        description: lessonData.description,
+        actual_lesson: lessonData.actual_lesson,
+        summary: lessonData.summary,
+        flashcards: lessonData.flashcards,
+        quiz: lessonData.quiz,
+      });
+
+      const savedLesson = await lesson.save();
+      createdLessons.push(savedLesson._id);
+    }
+
+    const newCourse = new Course({
+      title: courseTitle,
+      difficulty,
+      lessons: createdLessons,
+    });
+
+    const savedCourse = await newCourse.save();
+
+    return res.status(201).json({
+      success: true,
+      message: 'Course generated and saved successfully',
+      data: {
+        courseId: savedCourse._id,
+        lessons,
+      },
+    });
   } catch (error) {
-    res.status(500).json({ error: 'Failed to generate lessons' });
+    console.error('Error generating and saving course:', error);
+    return res.status(500).json({
+      error: 'Failed to generate and save course',
+    });
   }
 };
 

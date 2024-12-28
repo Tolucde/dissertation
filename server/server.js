@@ -7,6 +7,7 @@ const lessonRoutes = require('./routes/lessonRoutes');
 const quizRoutes = require('./routes/quizRoutes');
 const userRoutes = require('./routes/userRoutes');
 const bookmarkRoutes = require('./routes/bookmarkRoutes');
+const recommendationRoutes = require('./routes/recommendationRoutes')
 
 require('dotenv').config();
 
@@ -63,7 +64,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/lessons', lessonRoutes);
 app.use('/api/quiz', quizRoutes);
 app.use('/api/bookmarks', bookmarkRoutes);
-
+app.use('/api/recommendations', recommendationRoutes);
 
 
 

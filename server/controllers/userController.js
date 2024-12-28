@@ -168,7 +168,7 @@ const userController = {
   },
   updateUserInterests: async (req, res) => {
       try {
-        const { interests, difficulty } = req.body;
+        const { interests, difficulty, userId} = req.body;
         
         // Validate interests array
         if (!Array.isArray(interests)) {
@@ -176,7 +176,7 @@ const userController = {
         }
   
         const user = await User.findByIdAndUpdate(
-          req.user.id,
+          userId,
           { interests, difficulty },
           { new: true }
         ).select('-password');

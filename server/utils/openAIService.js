@@ -53,7 +53,7 @@ it should be more than a page
      - A "front" field.
      - A "back" field.
      -The front showing the question and the back showing the answer.
-   - A "quiz" array containing 5 multiple-choice questions. Each question has:
+   - A "quiz" array containing 1 multiple-choice questions. Each question has:
      - A "question" field.
      - An "options" array with 1 possible answers.
      - A "correctAnswer" field specifying the correct answer.

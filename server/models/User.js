@@ -5,7 +5,7 @@ const userSchema = new mongoose.Schema({
     email:{type: String, required: true, unique:true},
     password:{type:String, required:true},
     interests:{type: [String], default:[]},
-    difficulty: {type:String, default: 'beginner'},
+    difficulty: {type:String, default: 'Beginner'},
     completedCourses: [{type: mongoose.Schema.Types.ObjectId, ref: 'Course'}],
     completedLessons: [{type: mongoose.Schema.Types.ObjectId, ref: 'Lesson'}],
     progress: {
