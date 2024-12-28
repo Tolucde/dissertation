@@ -1,10 +1,12 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
 
   const VITE_API_URL = import.meta.env.VITE_API_URL;
+  const navigate = useNavigate();
   // Initialize state from localStorage if it exists
   const [user, setUser] = useState(() => {
     const savedUser = localStorage.getItem('user');
@@ -18,61 +20,38 @@ export const AppProvider = ({ children }) => {
   const generateCourse = async (courseTitle, difficulty) => {
     setIsGenerating(true);
     setGenerationError(null);
-    
+  
     try {
-
       const checkResponse = await fetch(`${VITE_API_URL}/lessons/find`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ courseTitle }),
       });
   
       const checkData = await checkResponse.json();
-      
+  
       // If course exists, return it
       if (checkResponse.ok && checkData.data) {
-        return {lessons: checkData.data, courseId: checkData.courseId}
+        return { lessons: checkData.data, courseId: checkData.courseId };
       }
   
-      // If course doesn't exist, generate it
-      const generateResponse = await fetch(`${VITE_API_URL}/lessons/generate`, {
+      // Generate and save the course in one step
+      const generateAndSaveResponse = await fetch(`${VITE_API_URL}/lessons/generate`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ courseTitle, difficulty }),
       });
-
-
-      const generateData = await generateResponse.json();
-      if (!generateResponse.ok) {
-        throw new Error(generateData.error || 'Failed to generate course');
+  
+      const generateAndSaveData = await generateAndSaveResponse.json();
+  
+      if (!generateAndSaveResponse.ok) {
+        throw new Error(generateAndSaveData.error || 'Failed to generate and save course');
       }
-
-      const parsedLessons = JSON.parse(generateData.data);
-       // Save the generated course to database
-    const saveResponse = await fetch(`${VITE_API_URL}/lessons/save`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-
-      body: JSON.stringify({ 
-        title:courseTitle,
-        difficulty,
-        lessons: parsedLessons.lessons
-      }),
-    });
-   
-    if (!saveResponse.ok) {
-      console.error('Failed to save course to database');
-    }
-    const savedCourse = await saveResponse.json()
-      return {lessons: parsedLessons.lessons, courseId: savedCourse.data._id}
-      
-
+  
+      return {
+        lessons: generateAndSaveData.data.lessons,
+        courseId: generateAndSaveData.data.courseId,
+      };
     } catch (error) {
       setGenerationError(error.message);
       throw error;
@@ -80,8 +59,15 @@ export const AppProvider = ({ children }) => {
       setIsGenerating(false);
     }
   };
-
-
+  
+  const handleCourseSelect = (course, difficulty) => {
+    navigate('/lessonPage', { 
+      state: { 
+        courseTitle: course,
+        difficulty: difficulty
+      }
+    });
+  };
 
 
 
@@ -98,6 +84,7 @@ export const AppProvider = ({ children }) => {
   const value = {
     user,
     setUser,
+    handleCourseSelect,
     searchQuery,
     setSearchQuery,
     isGenerating,

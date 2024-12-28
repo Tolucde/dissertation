@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Card } from '../../sharedStyles';
+import { useAppContext } from '../../AppContext';
 
 const SearchContainer = styled(Card)`
   display: flex;
@@ -77,6 +78,7 @@ const ViewMoreButton = styled.button`
 `;
 
 const SearchBar = () => {
+  const handleCourseSelect = useAppContext()
   
   const navigate = useNavigate();
 
@@ -85,14 +87,7 @@ const SearchBar = () => {
   const [filteredCourses, setFilteredCourses] = useState([]);
   const [visibleCourses, setVisibleCourses] = useState(8);
 
-  const handleCourseSelect = (course) => {
-    navigate('/lessonPage', { 
-      state: { 
-        courseTitle: course['Course Name'],
-        difficulty: course['Difficulty Level']
-      }
-    });
-  };
+ 
   // Fetch courses from the API
   useEffect(() => {
     const fetchCourses = async () => {
@@ -144,7 +139,7 @@ const SearchBar = () => {
           <ResultsContainer>
             {filteredCourses.slice(0, visibleCourses).map((course, index) => (
               <ResultItem key={index}
-              onClick={() => handleCourseSelect(course)}
+              onClick={() => handleCourseSelect(course['Course Name'], course['Difficulty Level'])}
                 style={{ cursor: 'pointer' }}
               >{course['Course Name']}</ResultItem>
             ))}

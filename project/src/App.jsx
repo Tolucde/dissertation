@@ -11,8 +11,8 @@ import { AppProvider } from './AppContext';
 
 function App() {
   return (
-    <AppProvider>
     <Router>
+      <AppProvider>
       <Routes>
         <Route path='/login' element={<Login />} />
         <Route path='/dashboard' element={<Dashboard />} />
@@ -22,8 +22,8 @@ function App() {
         <Route path='/' element={<HomePage />}/>
         <Route path='/onboarding' element={<OnboardingPage />}/>
       </Routes>
-    </Router>
     </AppProvider>
+    </Router>
   )
 }
 

@@ -1,5 +1,9 @@
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+
 import styled from 'styled-components'
 import { Card, Title } from '../../sharedStyles'
+import { useAppContext } from '../../AppContext'
 
 const SectionTitle = styled.h3`
   font-size: 1.125rem;
@@ -39,18 +43,52 @@ const Difficulty = styled.span`
   color: #64748b;
 `
 
-const Recommendations = () => {
-  // ... same recommendations data as before ...
+const Recommendations = ({user}) => {
+  const VITE_API_URL = import.meta.env.VITE_API_URL
+  const { handleCourseSelect } = useAppContext();
+  const navigate = useNavigate();
+
+  const [recommendedCourses, setRecommendedCourses] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
+
   const recommendations = {
     currentLessons: [
       { id: 1, title: 'Introduction to React', progress: 60 },
       { id: 2, title: 'React Hooks Deep Dive', progress: 25 },
     ],
-    suggestedCourses: [
+    recommendedCourses: [
       { id: 1, title: 'Advanced React Patterns', difficulty: 'Intermediate' },
       { id: 2, title: 'React Performance', difficulty: 'Advanced' },
     ],
   }
+
+  useEffect(() => {
+    const fetchRecommendedCourses = async () => {
+      try {
+        const response = await fetch(`${VITE_API_URL}/recommendations/performance`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            user_interests: user?.interests || [],
+            difficulty_level: 'Intermediate',
+            top_n: 5, 
+            n_clusters: 5 
+          })
+        })
+        const data = await response.json()
+        setRecommendedCourses(data.recommendations)
+      } catch (error) {
+        console.error('Error fetching recommended courses:', error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchRecommendedCourses()
+  }, [user])
+
   return (
     <Card>
       <Title>My Learning</Title>
@@ -68,13 +106,20 @@ const Recommendations = () => {
       </div>
 
       <div>
-        <SectionTitle>Suggested Courses</SectionTitle>
-        {recommendations.suggestedCourses.map((course) => (
-          <CourseCard key={course.id}>
-            <p>{course.title}</p>
-            <Difficulty>{course.difficulty}</Difficulty>
-          </CourseCard>
-        ))}
+      <SectionTitle>Recommended Courses</SectionTitle>
+        {isLoading ? (
+          <LessonCard>Loading recommendations...</LessonCard>
+        ) : (
+          recommendedCourses.map((course, index) => (
+            <CourseCard key={index}
+            style={{ cursor: 'pointer' }}
+            onClick={() => handleCourseSelect(course.course, course.difficulty)}
+            >
+              <p>{course.course}</p>
+              <Difficulty>{course.difficulty}</Difficulty>
+            </CourseCard>
+          ))
+        )}
       </div>
     </Card>
   )

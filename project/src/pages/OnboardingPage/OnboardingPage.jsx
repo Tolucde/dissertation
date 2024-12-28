@@ -93,7 +93,8 @@ const user = JSON.parse(localStorage.getItem('user'))
         },
         body: JSON.stringify({
           interests,
-          difficulty
+          difficulty,
+          userId: user._id
         })
       });
   
@@ -148,9 +149,9 @@ const user = JSON.parse(localStorage.getItem('user'))
             value={difficulty}
             onChange={(e) => setDifficulty(e.target.value)}
           >
-            <option value="beginner">Beginner</option>
-            <option value="intermediate">Intermediate</option>
-            <option value="advanced">Advanced</option>
+            <option value="Beginner">Beginner</option>
+            <option value="Intermediate">Intermediate</option>
+            <option value="Advanced">Advanced</option>
           </DifficultySelect>
         </Section>
 
