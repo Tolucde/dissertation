@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 
 import styled from 'styled-components'
 import { Card, Title } from '../../sharedStyles'
+import { useAppContext } from '../../AppContext'
 
 const StatsGrid = styled.div`
   display: grid;
@@ -26,18 +27,16 @@ const StatValue = styled.p`
   font-weight: bold;
   color: #1e293b;
   `
-  const progressData = {
-    quizScore: 85,
-    lessonsCompleted: 12,
-    totalLessons: 20,
-    timeSpent: '24h 30m',
-    engagementLevel: 'High',
-  }
+
 
 const ProgressOverview = ({ user }) => {
   const VITE_API_URL = import.meta.env.VITE_API_URL
+  const { fetchUserCourses, isLoading } = useAppContext()
 
   const [quizAverage, setQuizAverage] = useState(0)
+  const [completedCourses, setCompletedCourses] = useState()
+  const [activeCourses, setActiveCourses] = useState()
+
   const fetchQuizAverage = async () => {
     try {
       const response = await fetch(`${VITE_API_URL}/quiz/average/${user._id}`)
@@ -51,33 +50,51 @@ const ProgressOverview = ({ user }) => {
       setQuizAverage(0)
     }
   }
-  // Add useEffect to fetch data when component mounts
+ 
+  
   useEffect(() => {
-    if (user?._id) {
-      fetchQuizAverage()
-    }
-  }, [user])
+    const fetchCourses = async () => {
+      if (user?._id) {
+        const courses = await fetchUserCourses(user._id);
+        setCompletedCourses(courses.completedCourses.length)
+        setActiveCourses(courses.activeCourses)
+      }
+    };
+    fetchCourses();
+  }, [user]);
+
+
+  // Add useEffect to fetch data when component mounts
+  // useEffect(() => {
+  //   if (user?._id) {
+  //     fetchQuizAverage()
+  //   }
+  // }, [user])
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
+
+
   return (
     <Card>
       <Title>Your Progress</Title>
       <StatsGrid>
         <StatCard bgcolor='#eff6ff'>
           <StatLabel>Quiz Average</StatLabel>
-          <StatValue>{quizAverage ? (quizAverage * 10).toFixed(2) : 0}%</StatValue>
+          {/* <StatValue>{quizAverage ? (quizAverage * 10).toFixed(2) : 0}%</StatValue> */}
         </StatCard>
         <StatCard bgcolor='#f0fdf4'>
           <StatLabel>Lessons Completed</StatLabel>
-          <StatValue>
-            {user?.progress?.lessonsCompleted}
-          </StatValue>
+        <StatValue>
+            {completedCourses }</StatValue>
         </StatCard>
         <StatCard bgcolor='#f5f3ff'>
-          <StatLabel>Time Spent</StatLabel>
+          <StatLabel>Streak</StatLabel>
           <StatValue>{user?.progress?.totalTimeSpent}</StatValue>
         </StatCard>
         <StatCard bgcolor='#fefce8'>
-          <StatLabel>Engagement Level</StatLabel>
-          <StatValue>{progressData.engagementLevel}</StatValue>
+          <StatLabel>Lessons Progress</StatLabel>
+          <StatValue>{activeCourses?.length/(completedCourses + activeCourses?.length) * 100}%</StatValue>
         </StatCard>
       </StatsGrid>
     </Card>

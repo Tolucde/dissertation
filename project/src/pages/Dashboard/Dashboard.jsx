@@ -104,7 +104,7 @@ const SidebarButton = styled.button`
   font-size: 1rem;
   text-align: left;
   cursor: pointer;
-
+  z-index: 1000; 
   transition: all 0.2s ease;
 
   &:hover {
@@ -120,14 +120,17 @@ const Dashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
 
-  const handleLogout = () => {
+  const handleLogout= () => {
+    console.log("logging out")
     localStorage.removeItem('user');
+    localStorage.clear();
     navigate('/login');
   };
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
+  
   return (
     <DashboardWrapper>
     <HamburgerButton onClick={toggleSidebar}>
@@ -146,8 +149,8 @@ const Dashboard = () => {
       Onboarding
     </SidebarButton>
     <SidebarButton onClick={handleLogout}>
-      Logout
-    </SidebarButton>
+          Logout
+        </SidebarButton>
   </Sidebar>
     <DashboardContainer>
       
@@ -160,7 +163,7 @@ const Dashboard = () => {
           <ProgressOverview user={user} />
         </WideSection>
 
-        <UserProfile user={user} />
+        <UserProfile handleLogout={handleLogout} user={user} />
 
         <WideSection>
           <Recommendations user={user} />

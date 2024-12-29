@@ -16,6 +16,7 @@ export const AppProvider = ({ children }) => {
   const [currentLesson, setCurrentLesson] = useState(0);
   const [isGenerating, setIsGenerating] = useState(false);
   const [generationError, setGenerationError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const generateCourse = async (courseTitle, difficulty) => {
     setIsGenerating(true);
@@ -69,7 +70,30 @@ export const AppProvider = ({ children }) => {
     });
   };
 
-
+  const fetchUserCourses = async (userId) => {
+    setIsLoading(true)
+    try {
+      const response = await fetch(`${VITE_API_URL}/lessons/${userId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+  
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error fetching completed courses:', error);
+      // setCompletedCourses(0);
+    } finally {
+      setIsLoading(false)
+    }
+  };
+  
 
   
   // Save user to localStorage whenever it changes
@@ -90,6 +114,9 @@ export const AppProvider = ({ children }) => {
     isGenerating,
     generationError,
     generateCourse,
+    fetchUserCourses,
+    isLoading,
+    setIsLoading,
     currentLesson,
     setCurrentLesson
   };

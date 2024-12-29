@@ -90,7 +90,9 @@ export const Login = () => {
 
         
         localStorage.setItem('user', JSON.stringify(data.user))
-        // Update app context with user data
+
+        const currentTime = new Date().getTime();
+        localStorage.setItem('loginTimestamp', currentTime);  // Store current timestamp in localStorage
 
         // Redirect to dashboard 
         navigate('/dashboard')  
@@ -120,6 +122,12 @@ export const Login = () => {
         const data = await response.json()
         // Store token in localStorage 
         localStorage.setItem('token', data.token)
+        localStorage.setItem('user', JSON.stringify(data.user))
+
+
+
+        const currentTime = new Date().getTime();
+        localStorage.setItem('loginTimestamp', currentTime); 
         
 
         // Redirect to dashboard 

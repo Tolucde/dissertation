@@ -91,12 +91,8 @@ const LogoutButton = styled.button`
     background: #dc2626;
   }
 `
-const UserProfile = () => {
-const user = JSON.parse(localStorage.getItem('user'))
-  
-  const handleLogout = () => {
-    // Add logout logic here
-  }
+const UserProfile = ({handleLogout, user}) => {
+
 
   return (
     <Card>

@@ -16,6 +16,9 @@ const LessonCard = styled.div`
   padding: 1rem;
   border-radius: 8px;
   margin-bottom: 0.75rem;
+  &:hover {
+    background: #e2e8f0;
+  }
 `
 
 const ProgressBar = styled.div`
@@ -45,11 +48,12 @@ const Difficulty = styled.span`
 
 const Recommendations = ({user}) => {
   const VITE_API_URL = import.meta.env.VITE_API_URL
-  const { handleCourseSelect } = useAppContext();
+  const { handleCourseSelect, fetchUserCourses, isLoading , setIsLoading} = useAppContext();
+
+  const [activeCourses, setActiveCourses] = useState([])
   const navigate = useNavigate();
 
   const [recommendedCourses, setRecommendedCourses] = useState([])
-  const [isLoading, setIsLoading] = useState(true)
 
   const recommendations = {
     currentLessons: [
@@ -61,6 +65,17 @@ const Recommendations = ({user}) => {
       { id: 2, title: 'React Performance', difficulty: 'Advanced' },
     ],
   }
+  useEffect(() => {
+    const fetchCourses = async () => {
+      if (user?._id) {
+        console.log(user._id);
+        const courses = await fetchUserCourses(user._id);
+        setActiveCourses(courses.activeCourses)
+      }
+    };
+    fetchCourses();
+  }, [user]);
+  console.log(activeCourses)
 
   useEffect(() => {
     const fetchRecommendedCourses = async () => {
@@ -95,11 +110,11 @@ const Recommendations = ({user}) => {
 
       <div>
         <SectionTitle>Continue Learning</SectionTitle>
-        {recommendations.currentLessons.map((lesson) => (
-          <LessonCard key={lesson.id}>
-            <p>{lesson.title}</p>
+        {activeCourses.map((course) => (
+          <LessonCard style={{cursor: 'pointer'}} key={course.courseId} onClick={() => handleCourseSelect(course.title)}>
+            <p>{course.title}</p>
             <ProgressBar>
-              <Progress progress={lesson.progress} />
+              <Progress progress={course.quizzesCompleted * 33.33} />
             </ProgressBar>
           </LessonCard>
         ))}
