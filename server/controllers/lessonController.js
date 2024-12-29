@@ -199,4 +199,39 @@ exports.markLessonAsCompleted = async (req, res) => {
 };
 
 
+exports.getUserCourses = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.userId)
+      .select('courseDetails')
+      .populate('courseDetails.courseId')
+    
+    if (!user || !user.courseDetails) {
+      return res.status(404).json({ completedCourses: [], activeCourses: [] });
+    }
+    
+    const courseDetails = user.courseDetails;
+    
+    const completedCourses = courseDetails
+      .filter(course => course.quizzes.length === 3)
+      .map(course => course.courseId);
+    
+    const activeCourses = courseDetails
+      .filter(course => course.quizzes.length < 3)
+      .map(course => ({
+        courseId: course.courseId._id,
+        quizzesCompleted: course.quizzes.length,
+        title: course.courseId.title
+      }));
+    
+    return res.json({ completedCourses, activeCourses });
+
+  } catch (error) {
+    console.error("Error fetching user courses:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+
+
+
 

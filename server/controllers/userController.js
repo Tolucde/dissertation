@@ -24,7 +24,7 @@ const userController = {
       // Hash password
       const salt = await bcrypt.genSalt(10);
       user.password = await bcrypt.hash(password, salt);
-
+      user.lastActiveDate = new Date();
       await user.save();
 
       // Create token
@@ -47,7 +47,8 @@ const userController = {
       if (!user) {
         return res.status(400).json({ message: 'Email account does not exist' });
       }
-
+      user.lastActiveDate = new Date();
+      await user.save();
       // Validate password
       const isValidPassword = await bcrypt.compare(password, user.password);
       if (!isValidPassword) {
@@ -67,7 +68,8 @@ const userController = {
 
   logout: async (req, res) => {
     try {
-      // In a token-based system, client-side should handle token removal
+      
+
       res.json({ message: 'Logged out successfully' });
     } catch (error) {
       res.status(500).json({ message: 'Server error', error: error.message });
@@ -191,6 +193,21 @@ const userController = {
         res.status(500).json({ message: 'Server error', error: error.message });
       }
     },
+
+    updateUserLastActiveDate: async (userId) => {
+      try {
+        const user = await User.findById(userId);
+    
+        if (user) {
+          user.lastActiveDate = new Date();  // Set to current date and time
+          await user.save();  // Save the updated user document
+          console.log("Last active date updated:", user.lastActiveDate);
+        }
+      } catch (error) {
+        console.error("Error updating last active date:", error);
+      }
+    }
+
 };
 
 

@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema({
     difficulty: {type:String, default: 'Beginner'},
     completedCourses: [{type: mongoose.Schema.Types.ObjectId, ref: 'Course'}],
     completedLessons: [{type: mongoose.Schema.Types.ObjectId, ref: 'Lesson'}],
+    lastActiveDate: { type: Date, default: null },
     progress: {
         currentCourse: { type: mongoose.Schema.Types.ObjectId, ref: 'Course' },
         listOfCourses: [{type: mongoose.Schema.Types.ObjectId, ref: 'Course'}],
