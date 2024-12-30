@@ -71,10 +71,16 @@ exports.generate = async (req, res) => {
 exports.findCourse = async (req, res) => {
   try {
     const { courseTitle } = req.body;
-    
-    // Case-insensitive search for the course
-    const course = await Course.findOne({ 
-      title: { $regex: new RegExp(`^${courseTitle}$`, 'i') }
+
+    // Normalize the title: trim and convert to lowercase
+    const normalizedCourseTitle = courseTitle.trim().toLowerCase();
+
+    // Escape special characters in the course title for regex
+    const escapedTitle = normalizedCourseTitle.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
+
+    // Case-insensitive search for the course with regex, using the escaped title
+    const course = await Course.findOne({
+      title: { $regex: new RegExp(`.*${escapedTitle}.*`, 'i') }
     }).populate('lessons'); 
 
     if (!course) {
@@ -168,7 +174,6 @@ exports.markLessonAsCompleted = async (req, res) => {
     const lessonDetail = user.lessonDetails.find(
       detail => detail.courseId.toString() === courseId
     );
-    console.log(lessonDetail.quizzes)
     // const isAlreadyCompleted = user.completedCourses.some(
     //   lesson => lesson.lessonId === lessonId
     // );
@@ -203,26 +208,31 @@ exports.getUserCourses = async (req, res) => {
   try {
     const user = await User.findById(req.params.userId)
       .select('courseDetails')
-      .populate('courseDetails.courseId')
-    
-    if (!user || !user.courseDetails) {
+      .populate('courseDetails.courseId');
+
+    if (!user || !user.courseDetails || user.courseDetails.length === 0) {
       return res.status(404).json({ completedCourses: [], activeCourses: [] });
     }
-    
+
+    console.log("User course details after population:", user.courseDetails);
+
     const courseDetails = user.courseDetails;
-    
-    const completedCourses = courseDetails
+
+    // Filter out courses where `courseId` is null or undefined
+    const validCourses = courseDetails.filter(course => course.courseId);
+
+    const completedCourses = validCourses
       .filter(course => course.quizzes.length === 3)
       .map(course => course.courseId);
-    
-    const activeCourses = courseDetails
+
+    const activeCourses = validCourses
       .filter(course => course.quizzes.length < 3)
       .map(course => ({
         courseId: course.courseId._id,
         quizzesCompleted: course.quizzes.length,
         title: course.courseId.title
       }));
-    
+
     return res.json({ completedCourses, activeCourses });
 
   } catch (error) {

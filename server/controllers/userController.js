@@ -1,6 +1,7 @@
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const moment = require('moment');
 
 const userController = {
   // Auth Controllers
@@ -24,7 +25,7 @@ const userController = {
       // Hash password
       const salt = await bcrypt.genSalt(10);
       user.password = await bcrypt.hash(password, salt);
-      user.lastActiveDate = new Date();
+      // user.lastActiveDate = new Date();
       await user.save();
 
       // Create token
@@ -47,8 +48,8 @@ const userController = {
       if (!user) {
         return res.status(400).json({ message: 'Email account does not exist' });
       }
-      user.lastActiveDate = new Date();
-      await user.save();
+      // user.lastActiveDate = new Date();
+      // await user.save();
       // Validate password
       const isValidPassword = await bcrypt.compare(password, user.password);
       if (!isValidPassword) {
@@ -206,8 +207,74 @@ const userController = {
       } catch (error) {
         console.error("Error updating last active date:", error);
       }
-    }
+    },
 
+    updateStreak: async (req, res) => {
+      const { userId } = req.body;
+    
+      try {
+        const user = await User.findById(userId);
+        console.log('Initial user state:', {
+          currentStreak: user.currentStreak,
+          lastActiveDate: user.lastActiveDate
+        });
+    
+        if (!user) {
+          return res.status(404).send('User not found.');
+        }
+    
+        const today = moment().startOf('day');
+        const lastActiveDate = user.lastActiveDate ? moment(user.lastActiveDate).startOf('day') : null;
+        
+        console.log('Dates:', {
+          today: today.format(),
+          lastActiveDate: lastActiveDate ? lastActiveDate.format() : null
+        });
+    
+        // Initialize currentStreak if it doesn't exist
+        if (typeof user.currentStreak !== 'number') {
+          console.log('Initializing streak to 0');
+          user.currentStreak = 0;
+        }
+    
+        if (lastActiveDate) {
+          const daysDifference = today.diff(lastActiveDate, 'days');
+          console.log('Days difference:', daysDifference);
+          
+          if (daysDifference === 0) {
+            // Same day login, maintain current streak
+            console.log('Same day login - maintaining streak');
+          } else if (daysDifference === 1) {
+            // Consecutive day, increment streak
+            user.currentStreak += 1;
+            console.log('Consecutive day - incrementing streak to:', user.currentStreak);
+          } else {
+            // More than one day gap, reset streak
+            user.currentStreak = 1;
+            console.log('Gap in days - resetting streak to 1');
+          }
+        } else {
+          // First time activity
+          user.currentStreak = 1;
+          console.log('First time activity - setting streak to 1');
+        }
+    
+        // Update last active date
+        user.lastActiveDate = today.toDate();
+        await user.save();
+        
+        console.log('Final user state:', {
+          currentStreak: user.currentStreak,
+          lastActiveDate: user.lastActiveDate
+        });
+    
+        res.status(200).json({ currentStreak: user.currentStreak });
+      } catch (error) {
+        console.error('Error updating streak:', error);
+        res.status(500).send('Internal server error.');
+      }
+    }
+    
 };
 
 

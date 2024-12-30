@@ -7,7 +7,7 @@ import Recommendations from './Recommendations'
 import NavigationButtons from './NavigationButtons'
 import UserProfile from './UserProfile'
 import { useAppContext } from '../../AppContext'
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 
 const DashboardContainer = styled.div`
@@ -115,7 +115,8 @@ const SidebarButton = styled.button`
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem('user'))
+  const user = useMemo(() => JSON.parse(localStorage.getItem('user')), []);
+
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -130,6 +131,9 @@ const Dashboard = () => {
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
+  // useEffect(()=>{
+  //   setCurrentLesson(0)
+  // },[currentLesson])
   
   return (
     <DashboardWrapper>

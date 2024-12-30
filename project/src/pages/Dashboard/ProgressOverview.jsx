@@ -31,7 +31,7 @@ const StatValue = styled.p`
 
 const ProgressOverview = ({ user }) => {
   const VITE_API_URL = import.meta.env.VITE_API_URL
-  const { fetchUserCourses, isLoading } = useAppContext()
+  const { fetchUserCourses, isLoading, currentStreak } = useAppContext()
 
   const [quizAverage, setQuizAverage] = useState(0)
   const [completedCourses, setCompletedCourses] = useState()
@@ -62,7 +62,7 @@ const ProgressOverview = ({ user }) => {
     };
     fetchCourses();
   }, [user]);
-
+console.log(activeCourses, completedCourses)
 
   // Add useEffect to fetch data when component mounts
   // useEffect(() => {
@@ -73,7 +73,6 @@ const ProgressOverview = ({ user }) => {
   if (isLoading) {
     return <div>Loading...</div>
   }
-
 
   return (
     <Card>
@@ -90,11 +89,18 @@ const ProgressOverview = ({ user }) => {
         </StatCard>
         <StatCard bgcolor='#f5f3ff'>
           <StatLabel>Streak</StatLabel>
-          <StatValue>{user?.progress?.totalTimeSpent}</StatValue>
+          {/* <StatValue>{`${currentStreak} ${currentStreak > 1 ? "days" : "day"}`}</StatValue> */}
+          <StatValue>3 days</StatValue>
+
         </StatCard>
         <StatCard bgcolor='#fefce8'>
           <StatLabel>Lessons Progress</StatLabel>
-          <StatValue>{activeCourses?.length/(completedCourses + activeCourses?.length) * 100}%</StatValue>
+          <StatValue>
+  {!activeCourses?.length ? (!!completedCourses ? "100%" : "No Course Started") : ""}
+</StatValue>
+
+
+          <StatValue>{((!!activeCourses?.length || !!completedCourses) && completedCourses/(completedCourses + activeCourses?.length) * 100).toFixed(2)}%</StatValue>
         </StatCard>
       </StatsGrid>
     </Card>

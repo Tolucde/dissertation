@@ -9,6 +9,7 @@ const userSchema = new mongoose.Schema({
     completedCourses: [{type: mongoose.Schema.Types.ObjectId, ref: 'Course'}],
     completedLessons: [{type: mongoose.Schema.Types.ObjectId, ref: 'Lesson'}],
     lastActiveDate: { type: Date, default: null },
+    currentStreak: { type: Number, default: 0 },
     progress: {
         currentCourse: { type: mongoose.Schema.Types.ObjectId, ref: 'Course' },
         listOfCourses: [{type: mongoose.Schema.Types.ObjectId, ref: 'Course'}],

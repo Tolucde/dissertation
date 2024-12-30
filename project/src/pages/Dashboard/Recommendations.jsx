@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect, } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import styled from 'styled-components'
@@ -46,36 +46,33 @@ const Difficulty = styled.span`
   color: #64748b;
 `
 
-const Recommendations = ({user}) => {
+const Recommendations = React.memo(({ user }) => {
   const VITE_API_URL = import.meta.env.VITE_API_URL
   const { handleCourseSelect, fetchUserCourses, isLoading , setIsLoading} = useAppContext();
 
+  const [prevUserId, setPrevUserId] = useState(user?._id);
   const [activeCourses, setActiveCourses] = useState([])
   const navigate = useNavigate();
 
   const [recommendedCourses, setRecommendedCourses] = useState([])
 
-  const recommendations = {
-    currentLessons: [
-      { id: 1, title: 'Introduction to React', progress: 60 },
-      { id: 2, title: 'React Hooks Deep Dive', progress: 25 },
-    ],
-    recommendedCourses: [
-      { id: 1, title: 'Advanced React Patterns', difficulty: 'Intermediate' },
-      { id: 2, title: 'React Performance', difficulty: 'Advanced' },
-    ],
-  }
-  useEffect(() => {
-    const fetchCourses = async () => {
-      if (user?._id) {
-        console.log(user._id);
-        const courses = await fetchUserCourses(user._id);
-        setActiveCourses(courses.activeCourses)
-      }
-    };
-    fetchCourses();
-  }, [user]);
-  console.log(activeCourses)
+
+// useEffect(() => {
+//   if (user?._id && user._id !== prevUserId) {
+//     setPrevUserId(user._id);
+//     fetchCourses();
+//   }
+// }, [user, prevUserId]); 
+useEffect(() => {
+  const fetchCourses = async () => {
+    if (user?._id) {
+      console.log(user._id);
+      const courses = await fetchUserCourses(user._id);
+      setActiveCourses(courses.activeCourses)
+    }
+  };
+  fetchCourses();
+}, [user]);
 
   useEffect(() => {
     const fetchRecommendedCourses = async () => {
@@ -109,13 +106,16 @@ const Recommendations = ({user}) => {
       <Title>My Learning</Title>
 
       <div>
-        <SectionTitle>Continue Learning</SectionTitle>
-        {activeCourses.map((course) => (
+        {
+activeCourses.length > 0 &&
+          <SectionTitle>Continue Learning</SectionTitle>
+        }
+        {activeCourses.length>0 && activeCourses.map((course) => (
           <LessonCard style={{cursor: 'pointer'}} key={course.courseId} onClick={() => handleCourseSelect(course.title)}>
-            <p>{course.title}</p>
-            <ProgressBar>
-              <Progress progress={course.quizzesCompleted * 33.33} />
-            </ProgressBar>
+          <p>{course.title}</p>
+          <ProgressBar>
+          <Progress progress={course.quizzesCompleted * 33.33} />
+          </ProgressBar>
           </LessonCard>
         ))}
       </div>
@@ -138,6 +138,6 @@ const Recommendations = ({user}) => {
       </div>
     </Card>
   )
-}
+})
 
 export default Recommendations

@@ -21,7 +21,7 @@ const QuizPage = () => {
 const {_id: userId, name} = JSON.parse(localStorage.getItem('user'));
 
 const {currentLesson, setCurrentLesson} = useAppContext();
-  const {quiz, difficulty, title, courseTitle, courseId, lessonId, index} = useLocation().state;
+  const {quiz, difficulty, title, courseTitle, courseId, lessonId,index} = useLocation().state;
   console.log(useLocation().state)
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -90,7 +90,7 @@ const {currentLesson, setCurrentLesson} = useAppContext();
           quizIndex: currentQuestion,
           lessonId,
           score,
-          userId
+          userId,
         })
       });
 

@@ -37,7 +37,7 @@ const [courseId, setCourseId] = useState();
   const [currentProgress, setCurrentProgress] = useState(33.33*(currentLesson+1));
 
   
-console.log(lesson)
+console.log(currentLesson)
 
   const [flippedCards, setFlippedCards] = useState(
     new Array(lesson[currentLesson]?.flashcards?.length).fill(false)
@@ -67,7 +67,6 @@ console.log(lesson)
         try {
           const response = await memoizedGenerateCourse(courseTitle, difficulty);
           if (!!response) setIsLoading(false);
-          console.log(response)
           setLesson(response.lessons);
           setCourseId(response.courseId);
           setHasGenerated(true);
@@ -76,12 +75,12 @@ console.log(lesson)
           console.error('Failed to generate course:', error);
           setIsLoading(true);
         } finally {
-          // setIsLoading(false);
+          setIsLoading(false);
         }
       };
       
       generateLessons();
-    }, [courseTitle, memoizedGenerateCourse]); 
+    }, [courseTitle]); 
     
    
     

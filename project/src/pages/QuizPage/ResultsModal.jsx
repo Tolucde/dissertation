@@ -48,11 +48,19 @@ const ResultsModal = ({ score, totalQuestions, onPreviousLesson, onNextLesson, c
         <p>Your Score: {score}%</p>
         <p>Correct Answers: {Math.round(score * totalQuestions / 100)} out of {totalQuestions}</p>
         <ButtonContainer>
-          <Button onClick={onPreviousLesson}>Previous Lesson</Button>
-          {currentLesson === 2 ? (
-            <Button onClick={() => navigate('/dashboard')}>Go to Dashboard</Button>
+
+        {currentLesson >0 ? (
+            <Button onClick={onPreviousLesson}>Previous Lesson</Button>
+           
           ) : (
+            <Button onClick={() => navigate('/dashboard')}>Go to Dashboard</Button>
+          )}
+
+          {currentLesson < 2 ? (
             <Button onClick={onNextLesson}>Next Lesson</Button>
+           
+          ) : (
+            <Button onClick={() => navigate('/dashboard')}>Go to Dashboard</Button>
           )}
         </ButtonContainer>
       </ModalContent>

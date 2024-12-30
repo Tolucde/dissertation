@@ -17,6 +17,7 @@ export const AppProvider = ({ children }) => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [generationError, setGenerationError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [currentStreak, setCurrentStreak] = useState(0);
 
   const generateCourse = async (courseTitle, difficulty) => {
     setIsGenerating(true);
@@ -60,6 +61,31 @@ export const AppProvider = ({ children }) => {
       setIsGenerating(false);
     }
   };
+
+
+const updateStreak = async (userId) => {
+  try {
+    const response = await fetch(`${VITE_API_URL}/users/streak`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ userId }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    setCurrentStreak(data.currentStreak); // Update state
+    return data.currentStreak;
+  } catch (error) {
+    console.error('Error updating streak:', error);
+    throw error; // Optional: propagate error for the caller to handle
+  }
+};
+
   
   const handleCourseSelect = (course, difficulty) => {
     navigate('/lessonPage', { 
@@ -112,11 +138,14 @@ export const AppProvider = ({ children }) => {
     searchQuery,
     setSearchQuery,
     isGenerating,
+    updateStreak,
     generationError,
     generateCourse,
     fetchUserCourses,
     isLoading,
     setIsLoading,
+    currentStreak,
+    setCurrentStreak,
     currentLesson,
     setCurrentLesson
   };
@@ -134,12 +163,3 @@ export const useAppContext = () => {
 };
 
 
-
-// const handleGenerateCourse = async () => {
-//   try {
-//     const lessons = await generateCourse('Your Course Title');
-//     console.log(lessons);
-//   } catch (error) {
-//     console.error('Failed to generate course:', error);
-//   }
-// };

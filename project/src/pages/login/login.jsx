@@ -14,7 +14,7 @@ import {
 import {  useNavigate } from 'react-router-dom';
 
 export const Login = () => {
-  const { user, setUser } = useAppContext();
+  const { user, setUser, updateStreak } = useAppContext();
 
   const navigate = useNavigate()
   const API_URL = import.meta.env.VITE_API_URL;
@@ -87,15 +87,22 @@ export const Login = () => {
         const data = await response.json()
         // Store token in localStorage 
         localStorage.setItem('token', data.token)
-
-        
         localStorage.setItem('user', JSON.stringify(data.user))
 
         const currentTime = new Date().getTime();
         localStorage.setItem('loginTimestamp', currentTime);  // Store current timestamp in localStorage
 
+        try {
+          const streak = await updateStreak(data.user._id);
+          console.log(`Updated streak: ${streak}`);
+        } catch (error) {
+          console.error('Failed to update streak:', error);
+          alert('Could not update streak. Please try again later.');
+        }
+
         // Redirect to dashboard 
-        navigate('/dashboard')  
+        navigate('/onboarding')  
+         
       } else {
         // Sign up logic
         if (formData.password !== formData.confirmPassword) {
@@ -123,15 +130,20 @@ export const Login = () => {
         // Store token in localStorage 
         localStorage.setItem('token', data.token)
         localStorage.setItem('user', JSON.stringify(data.user))
-
-
+        try {
+          const streak = await updateStreak(data.user._id);
+          console.log(`Updated streak: ${streak}`);
+        } catch (error) {
+          console.error('Failed to update streak:', error);
+          alert('Could not update streak. Please try again later.');
+        }
 
         const currentTime = new Date().getTime();
         localStorage.setItem('loginTimestamp', currentTime); 
         
 
         // Redirect to dashboard 
-        navigate('/dashboard')  
+        navigate('/onboarding')  
       }
     } catch (error) {
       console.error('Authentication error:', error)

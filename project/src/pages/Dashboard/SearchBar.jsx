@@ -78,7 +78,7 @@ const ViewMoreButton = styled.button`
 `;
 
 const SearchBar = () => {
-  const handleCourseSelect = useAppContext()
+  const {handleCourseSelect} = useAppContext()
   
   const navigate = useNavigate();
 
