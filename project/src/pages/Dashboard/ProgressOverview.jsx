@@ -31,7 +31,7 @@ const StatValue = styled.p`
 
 const ProgressOverview = ({ user }) => {
   const VITE_API_URL = import.meta.env.VITE_API_URL
-  const { fetchUserCourses, isLoading, currentStreak } = useAppContext()
+  const { fetchUserCourses, isLoading, currentStreak, setisLoading } = useAppContext()
 
   const [quizAverage, setQuizAverage] = useState(0)
   const [completedCourses, setCompletedCourses] = useState()
@@ -54,10 +54,12 @@ const ProgressOverview = ({ user }) => {
   
   useEffect(() => {
     const fetchCourses = async () => {
+      setisLoading(true)
       if (user?._id) {
         const courses = await fetchUserCourses(user._id);
         setCompletedCourses(courses.completedCourses.length)
         setActiveCourses(courses.activeCourses)
+        setisLoading(false)
       }
     };
     fetchCourses();
@@ -99,8 +101,7 @@ console.log(activeCourses, completedCourses)
   {!activeCourses?.length ? (!!completedCourses ? "100%" : "No Course Started") : ""}
 </StatValue>
 
-
-          <StatValue>{((!!activeCourses?.length || !!completedCourses) && completedCourses/(completedCourses + activeCourses?.length) * 100).toFixed(2)}%</StatValue>
+          <StatValue>{((!!activeCourses?.length || completedCourses>0) && completedCourses/(completedCourses + activeCourses?.length) * 100)}%</StatValue>
         </StatCard>
       </StatsGrid>
     </Card>
