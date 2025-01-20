@@ -36,8 +36,7 @@ const [lesson, setLesson] = useState([]);
 const [courseId, setCourseId] = useState();
   const [currentProgress, setCurrentProgress] = useState(33.33*(currentLesson+1));
 
-  
-console.log(currentLesson)
+
 
   const [flippedCards, setFlippedCards] = useState(
     new Array(lesson[currentLesson]?.flashcards?.length).fill(false)
