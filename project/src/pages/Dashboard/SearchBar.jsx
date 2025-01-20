@@ -87,15 +87,12 @@ const SearchBar = () => {
   const [filteredCourses, setFilteredCourses] = useState([]);
   const [visibleCourses, setVisibleCourses] = useState(8);
 
-  const VITE_API_URL = import.meta.env.VITE_API_URL;
-
-
  
   // Fetch courses from the API
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await fetch(`${VITE_API_URL}/data`);
+        const response = await fetch('http://localhost:3000/data');
         const data = await response.json();
         setCourses(data);
       } catch (error) {
