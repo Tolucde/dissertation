@@ -78,7 +78,6 @@ mongoose.connection.on('error', (error) => {
 app.get('/data', (req, res) => {
     res.json(jsonData);
   });
-  console.log(jsonData)
   
 app.use('/api/users', userRoutes);
 app.use('/api/lessons', lessonRoutes);
