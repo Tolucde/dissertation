@@ -82,10 +82,9 @@ mongoose.connection.on('error', (error) => {
 
 
 // Endpoint to fetch the entire JSON
-app.get('/api/data', (req, res) => {
+app.get('/data', (req, res) => {
     res.json(jsonData);
   });
-  console.log(jsonData)
   
 app.use('/api/users', userRoutes);
 app.use('/api/lessons', lessonRoutes);
