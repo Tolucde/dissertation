@@ -12,8 +12,24 @@ const recommendationRoutes = require('./routes/recommendationRoutes')
 require('dotenv').config();
 
 // Load the JSON file
-const jsonFilePath = './output.json';
-let jsonData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'));
+// Serve the public folder
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Load the JSON file from the public folder
+const jsonFilePath = path.join(__dirname, 'public', 'output.json');
+let jsonData;
+try {
+    jsonData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'));
+    console.log('JSON data loaded successfully');
+} catch (error) {
+    console.error('Error loading JSON file:', error);
+    jsonData = null; // Handle gracefully if the file cannot be loaded
+}
+
+// const jsonFilePath = './output.json';
+// let jsonData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'));
+
+
 
 const bodyParser = require('body-parser')
 const app = express();
@@ -59,36 +75,13 @@ mongoose.connection.on('error', (error) => {
 app.get('/data', (req, res) => {
     res.json(jsonData);
   });
+  console.log(jsonData)
   
 app.use('/api/users', userRoutes);
 app.use('/api/lessons', lessonRoutes);
 app.use('/api/quiz', quizRoutes);
 app.use('/api/bookmarks', bookmarkRoutes);
 app.use('/api/recommendations', recommendationRoutes);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 // Basic route for testing
