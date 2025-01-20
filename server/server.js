@@ -11,6 +11,10 @@ const recommendationRoutes = require('./routes/recommendationRoutes')
 
 require('dotenv').config();
 
+
+const bodyParser = require('body-parser')
+const app = express();
+
 // Load the JSON file
 // Serve the public folder
 app.use(express.static(path.join(__dirname, 'public')));
@@ -31,8 +35,6 @@ try {
 
 
 
-const bodyParser = require('body-parser')
-const app = express();
 
 // Middleware
 app.use(cors());
