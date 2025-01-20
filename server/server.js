@@ -82,7 +82,7 @@ mongoose.connection.on('error', (error) => {
 
 
 // Endpoint to fetch the entire JSON
-app.get('/data', (req, res) => {
+app.get('/api/data', (req, res) => {
     res.json(jsonData);
   });
   console.log(jsonData)
