@@ -38,7 +38,6 @@ try {
 
 
 // Middleware
-app.use(cors());
 // This allows all domains (you can restrict to certain origins)
 app.use(cors({
   origin: ['http://localhost:5173'],  // Adjust based on your frontend domain
