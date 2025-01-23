@@ -79,6 +79,8 @@ const ViewMoreButton = styled.button`
 
 const SearchBar = () => {
   const {handleCourseSelect} = useAppContext()
+  const VITE_API_URL_DATA = import.meta.env.VITE_API_URL_DATA;
+
   
   const navigate = useNavigate();
 
@@ -92,7 +94,7 @@ const SearchBar = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await fetch('http://localhost:3000/data');
+        const response = await fetch(VITE_API_URL_DATA);
         const data = await response.json();
         setCourses(data);
       } catch (error) {
