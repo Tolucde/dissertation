@@ -18,7 +18,7 @@ The output **MUST** be in the following JSON format:
       "title": "Lesson Title",
       "description": "Lesson description",
       
-      "actual_lesson": "THE LESSON should be between 50-60 words",
+      "actual_lesson": "THE LESSON should be between 500-600 words",
       "summary": ["3 key points or short summary"],
       "flashcards": [
       {
@@ -41,7 +41,7 @@ The output **MUST** be in the following JSON format:
 
 Requirements:
 1. Given the course title, generate a detailed course for the entire course. The output should include 3 lessons covering the course content from beginner to advanced level. 
-Each lesson must have: be in a way that the user can learn a great deal from it. it should be a comprehensive course. each  actual_lesson content should be between 50-60 words
+Each lesson must have: be in a way that the user can learn a great deal from it. it should be a comprehensive course. each  actual_lesson content should be between 500-600 words
 it should be more than a page
 
 2. 
@@ -53,7 +53,7 @@ it should be more than a page
      - A "front" field.
      - A "back" field.
      -The front showing the question and the back showing the answer.
-   - A "quiz" array containing 1 multiple-choice questions. Each question has:
+   - A "quiz" array containing 5 multiple-choice questions. Each question has:
      - A "question" field.
      - An "options" array with 1 possible answers.
      - A "correctAnswer" field specifying the correct answer.
@@ -68,7 +68,7 @@ Return only valid JSON. Do not include any other text.
       model: 'gpt-4o-mini',
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.7,
-      max_tokens:2000,
+      max_tokens:12000,
       top_p: 1,
       frequency_penalty: 0,
       presence_penalty: 0,
