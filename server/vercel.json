@@ -13,8 +13,8 @@
     }
   ],
   "functions": {
-    "api/lessons/generate": {
-      "timeout": 60
+    "routes/**/**": {
+      "maxDuration": 60
     }
   }
 }
