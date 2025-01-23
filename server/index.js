@@ -38,7 +38,14 @@ try {
 
 
 // Middleware
-app.use(cors());
+// app.use(cors());
+const cors = require('cors');
+app.use(cors({
+  origin: 'http://localhost:5173',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  credentials: true, // If you're using cookies or other credentials
+}));
+
 app.options('*', cors())
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
