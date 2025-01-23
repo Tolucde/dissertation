@@ -40,7 +40,7 @@ try {
 // Middleware
 // app.use(cors());
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: ['http://localhost:5173', 'https://dissertationcde.vercel.app'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   credentials: true, // If you're using cookies or other credentials
 }));
