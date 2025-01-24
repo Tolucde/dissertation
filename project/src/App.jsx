@@ -2,6 +2,7 @@ import './App.css'
 import { Login } from './pages/login/login'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Dashboard from './pages/Dashboard/Dashboard'
+import MyQuiz from "./pages/MyQuiz/MyQuiz"
 import LessonPage from './pages/LessonPage/LessonPage'
 import QuizPage from './pages/QuizPage/QuizPage'
 import Analytics from './pages/Analytics/Analytics'
@@ -39,6 +40,7 @@ function App() {
         <Route path='/quizpage' element={<ProtectedRoute component={QuizPage} />} />
         <Route path='/analytics' element={<ProtectedRoute component={Analytics} />} />
         <Route path='/' element={<ProtectedRoute component={HomePage} />} />
+        <Route path='/my-quizzes' element={<ProtectedRoute component={MyQuiz} />} />
         <Route path='/onboarding' element={<ProtectedRoute component={OnboardingPage} />} />
       </Routes>
     </AppProvider>

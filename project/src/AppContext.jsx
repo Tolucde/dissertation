@@ -16,6 +16,8 @@ export const AppProvider = ({ children }) => {
   const [currentLesson, setCurrentLesson] = useState(0);
   const [isGenerating, setIsGenerating] = useState(false);
   const [generationError, setGenerationError] = useState(null);
+  const [completedCourses, setCompletedCourses] = useState()
+  const [activeCourses, setActiveCourses] = useState()
   const [isLoading, setIsLoading] = useState(false);
   const [currentStreak, setCurrentStreak] = useState(0);
 
@@ -135,6 +137,10 @@ const updateStreak = async (userId) => {
     user,
     setUser,
     handleCourseSelect,
+    completedCourses,
+    activeCourses,
+    setCompletedCourses,
+    setActiveCourses,
     searchQuery,
     setSearchQuery,
     isGenerating,

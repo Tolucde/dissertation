@@ -143,12 +143,12 @@ const Dashboard = () => {
         <div></div>
       </HamburgerButton>
       <Sidebar isOpen={isSidebarOpen}>
-    <SidebarButton onClick={() => navigate('/analytics')}>
+    {/* <SidebarButton onClick={() => navigate('/analytics')}>
       Analytics
-    </SidebarButton>
-    <SidebarButton onClick={() => navigate('/performance-review')}>
+    </SidebarButton> */}
+    {/* <SidebarButton onClick={() => navigate('/performance-review')}>
       Performance Review
-    </SidebarButton>
+    </SidebarButton> */}
     <SidebarButton onClick={() => navigate('/onboarding')}>
       Onboarding
     </SidebarButton>

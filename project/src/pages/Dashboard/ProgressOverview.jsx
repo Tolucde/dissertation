@@ -31,11 +31,9 @@ const StatValue = styled.p`
 
 const ProgressOverview = ({ user }) => {
   const VITE_API_URL = import.meta.env.VITE_API_URL
-  const { fetchUserCourses, isLoading, currentStreak, setisLoading } = useAppContext()
+  const { fetchUserCourses, isLoading, currentStreak, setIsLoading, completedCourses, activeCourses, setActiveCourses, setCompletedCourses } = useAppContext()
 
   const [quizAverage, setQuizAverage] = useState(0)
-  const [completedCourses, setCompletedCourses] = useState()
-  const [activeCourses, setActiveCourses] = useState()
 
   const fetchQuizAverage = async () => {
     try {
@@ -54,17 +52,16 @@ const ProgressOverview = ({ user }) => {
   
   useEffect(() => {
     const fetchCourses = async () => {
-      setisLoading(true)
+      setIsLoading(true)
       if (user?._id) {
         const courses = await fetchUserCourses(user._id);
         setCompletedCourses(courses.completedCourses.length)
         setActiveCourses(courses.activeCourses)
-        setisLoading(false)
+        setIsLoading(false)
       }
     };
     fetchCourses();
-  }, [user]);
-console.log(activeCourses, completedCourses)
+  }, []);
 
   // Add useEffect to fetch data when component mounts
   // useEffect(() => {

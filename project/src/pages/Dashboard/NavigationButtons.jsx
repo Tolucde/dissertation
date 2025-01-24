@@ -1,5 +1,8 @@
+import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import { Card, Title } from '../../sharedStyles'
+import { useAppContext } from '../../AppContext'
+
 
 const ButtonsContainer = styled.div`
   display: flex;
@@ -33,13 +36,20 @@ const Button = styled.button`
 `
 
 const NavigationButtons = () => {
+  const {completedCourses, activeCourses, setActiveCourses, setCompletedCourses } = useAppContext()
+  console.log(completedCourses)
+
+  const navigate = useNavigate();
+
   return (
     <Card>
       <Title>Quick Access</Title>
       <ButtonsContainer>
-        <Button variant='quiz'>My Quizzes</Button>
-        <Button variant='lesson'>My CompletedLessons</Button>
-        <Button variant='settings'>Settings</Button>
+        <Button variant='quiz' onClick={() => navigate('/my-quizzes')}>
+          My Quizzes
+        </Button>
+        {/* <Button variant='lesson'>My CompletedLessons</Button> */}
+        <Button  onClick={() => navigate('/onboarding')} variant='settings'>Settings</Button>
       </ButtonsContainer>
     </Card>
   )

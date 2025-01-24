@@ -3,6 +3,9 @@ const User = require('../models/User');
 const submitQuiz = async (req, res) => {
   try {
     const { userId, lessonId, courseId, quizIndex, score } = req.body;
+    if (!lessonId) {
+      return res.status(400).json({ success: false, message: 'lessonId is required' });
+    }
 
     const user = await User.findById(userId);
     if (!user) {
@@ -27,8 +30,9 @@ const submitQuiz = async (req, res) => {
 
     // Find the quiz by index
     let existingQuiz = courseDetail.quizzes.find(
-      quiz => quiz.lessonId.toString() === lessonId
+      quiz => quiz?.lessonId?.toString() === lessonId
     );
+    console.log(existingQuiz)
 
     if (existingQuiz) {
       // Update existing quiz score
